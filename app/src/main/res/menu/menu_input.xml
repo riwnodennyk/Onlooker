@@ -2,8 +2,9 @@
       xmlns:tools="http://schemas.android.com/tools"
       tools:context=".InputActivity">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/send_input_mi"
+        android:icon="@drawable/ic_action_content_send"
         android:orderInCategory="100"
-        android:showAsAction="never"
-        android:title="@string/action_settings"/>
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/send"/>
 </menu>
