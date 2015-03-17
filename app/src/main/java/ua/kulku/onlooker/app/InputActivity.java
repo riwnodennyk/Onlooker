@@ -6,9 +6,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import ua.kulku.onlooker.R;
 import ua.kulku.onlooker.model.Input;
 
@@ -56,11 +53,6 @@ public class InputActivity extends Activity {
 
     private void send() {
         Input input = mInputFragment.getInput();
-        //todo
-        try {
-            new ObjectMapper().writeValueAsString(input);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        Input.save(input);
     }
 }

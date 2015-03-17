@@ -1,10 +1,16 @@
 <resources>
     <string name="app_name">Onlooker</string>
     <string name="send">Надіслати</string>
-    <string name="type">Тип</string>
+    <string name="type">Різновид</string>
     <string name="age">Вік</string>
     <string name="male">Чоловік</string>
     <string name="female">Жінка</string>
     <string name="gender">Стать</string>
     <string name="add_more">Додати ще</string>
+    <string name="answer">Відповідь</string>
+    <string name="create">Створити</string>
+    <string name="cancel">Скасувати</string>
+    <string name="name">Назва</string>
+    <string name="new_type">Новий різновид</string>
+    <string name="new_answer">Нова відповідь</string>
 </resources>

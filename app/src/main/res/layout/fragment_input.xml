@@ -64,5 +64,17 @@
                 android:layout_height="wrap_content"
                 android:text="@string/female"/>
         </RadioGroup>
+
+        <TextView
+            style="@style/Label"
+            android:labelFor="@+id/answer_input"
+            android:text="@string/answer"
+            />
+
+        <Spinner
+            android:id="@id/answer_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
     </LinearLayout>
 </ScrollView>
