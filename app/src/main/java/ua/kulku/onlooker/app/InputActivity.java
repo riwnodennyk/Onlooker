@@ -7,7 +7,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import ua.kulku.onlooker.R;
-import ua.kulku.onlooker.model.Input;
 
 
 public class InputActivity extends Activity {
@@ -52,7 +51,6 @@ public class InputActivity extends Activity {
     }
 
     private void send() {
-        Input input = mInputFragment.getInput();
-        Input.save(input);
+         mInputFragment.send();
     }
 }

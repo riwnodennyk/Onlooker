@@ -13,4 +13,9 @@
     <string name="name">Назва</string>
     <string name="new_type">Новий різновид</string>
     <string name="new_answer">Нова відповідь</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_input">Створення</string>
+    <string name="title_activity_stats">Статистика</string>
+    <string name="invalid_age">Недійсний вік</string>
 </resources>

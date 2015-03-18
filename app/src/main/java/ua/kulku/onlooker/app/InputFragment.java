@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ import ua.kulku.onlooker.R;
 import ua.kulku.onlooker.adapter.AnswerAdapter;
 import ua.kulku.onlooker.adapter.TypesAdapter;
 import ua.kulku.onlooker.model.Answer;
+import ua.kulku.onlooker.model.Data;
 import ua.kulku.onlooker.model.Gender;
 import ua.kulku.onlooker.model.Input;
 import ua.kulku.onlooker.model.Question;
@@ -62,6 +64,15 @@ public class InputFragment extends Fragment {
         mGenderView = (RadioGroup) view.findViewById(R.id.gender_input);
 
         mAnswerSpinner = (Spinner) view.findViewById(R.id.answer_input);
+
+        view.findViewById(R.id.show_polls_input)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getActivity(), StatsActivity.class);
+                        startActivity(intent);
+                    }
+                });
     }
 
     @Override
@@ -72,9 +83,9 @@ public class InputFragment extends Fragment {
                 case RC_CREATE_NEW_TYPE: {
                     String name = data.getStringExtra(CreateDialog.NAME_R);
                     Question question = new Question(name);
-                    Question.add(question);
+                    Data.add(question);
                     setupQuestionSpinner();
-                    mQuestionSpinner.setSelection(Question.getAll().indexOf(question));
+                    mQuestionSpinner.setSelection(Data.getAll().indexOf(question));
                     break;
                 }
                 case RC_CREATE_NEW_ANSWER: {
@@ -95,7 +106,7 @@ public class InputFragment extends Fragment {
     }
 
     private void setupQuestionSpinner() {
-        List<Question> questions = new ArrayList<>(Question.getAll());
+        List<Question> questions = new ArrayList<>(Data.getAll());
         questions.add(Question.ADD_MORE);
         final TypesAdapter adapter = new TypesAdapter(getActivity(), questions);
         mQuestionSpinner.setAdapter(adapter);
@@ -126,8 +137,8 @@ public class InputFragment extends Fragment {
         mAnswerSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Answer selectedTYpe = adapter.getItem(position);
-                if (selectedTYpe == Answer.ADD_MORE) {
+                Answer selectedType = adapter.getItem(position);
+                if (Question.ADD_MORE != mQuestionSpinner.getSelectedItem() && Answer.ADD_MORE == selectedType) {
                     showCreateNewAnswerDialog();
                 }
             }
@@ -146,12 +157,17 @@ public class InputFragment extends Fragment {
         newFragment.show(getFragmentManager(), "new type dialog");
     }
 
-    public Input getInput() {
-        Input input = new Input();
-        input.setQuestion(((Question) mQuestionSpinner.getSelectedItem()));
+    public void send() {
+
         String ageString = mAgeTextView.getText().toString();
-        if (TextUtils.isGraphic(ageString))
-            input.setAge(Integer.parseInt(ageString));
+        if (!TextUtils.isGraphic(ageString)) {
+            Toast.makeText(getActivity(), R.string.invalid_age, Toast.LENGTH_SHORT)
+                    .show();
+            return;
+        }
+
+        Input input = new Input();
+        input.setAge(Integer.parseInt(ageString));
         Gender gender;
         switch (mGenderView.indexOfChild(mGenderView.findViewById(mGenderView.getCheckedRadioButtonId()))) {
             case 0:
@@ -164,7 +180,9 @@ public class InputFragment extends Fragment {
                 throw new IllegalStateException("Unsupported index for gender " + mGenderView.indexOfChild(mGenderView.findViewById(mGenderView.getCheckedRadioButtonId())));
         }
         input.setGender(gender);
-        input.setAnswer(((Answer) mAnswerSpinner.getSelectedItem()));
-        return input;
+
+        ((Answer) mAnswerSpinner.getSelectedItem()).addInput(input);
+
+        mAgeTextView.setText("");
     }
 }
