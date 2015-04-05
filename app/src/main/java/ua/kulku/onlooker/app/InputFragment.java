@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import ua.kulku.onlooker.R;
@@ -158,7 +159,6 @@ public class InputFragment extends Fragment {
     }
 
     public void send() {
-
         String ageString = mAgeTextView.getText().toString();
         if (!TextUtils.isGraphic(ageString)) {
             Toast.makeText(getActivity(), R.string.invalid_age, Toast.LENGTH_SHORT)
@@ -180,6 +180,7 @@ public class InputFragment extends Fragment {
                 throw new IllegalStateException("Unsupported index for gender " + mGenderView.indexOfChild(mGenderView.findViewById(mGenderView.getCheckedRadioButtonId())));
         }
         input.setGender(gender);
+        input.setCreateDate(new GregorianCalendar());
 
         ((Answer) mAnswerSpinner.getSelectedItem()).addInput(input);
 

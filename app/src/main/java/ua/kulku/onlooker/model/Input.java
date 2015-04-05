@@ -3,6 +3,8 @@ package ua.kulku.onlooker.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
+import java.util.GregorianCalendar;
+
 /**
  * Created by andrii.lavrinenko on 07.03.2015.
  */@JsonTypeName
@@ -12,6 +14,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
     private int age;
     @JsonProperty
     private Gender gender;
+    @JsonProperty
+    private GregorianCalendar createDate;
 
     public void setAge(int age) {
         this.age = age;
@@ -21,4 +25,11 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
         this.gender = gender;
     }
 
+    public void setCreateDate(GregorianCalendar createDate) {
+        this.createDate = createDate;
+    }
+
+    public GregorianCalendar getCreateDate() {
+        return createDate;
+    }
 }

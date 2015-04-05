@@ -26,6 +26,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ua.kulku.onlooker.app.InputActivity" />
         </activity>
+        <activity
+            android:name=".app.AnswersListActivity"
+            android:label="@string/title_activity_answers_list"
+            android:parentActivityName=".app.StatsActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ua.kulku.onlooker.app.StatsActivity" />
+        </activity>
     </application>
 
 </manifest>
