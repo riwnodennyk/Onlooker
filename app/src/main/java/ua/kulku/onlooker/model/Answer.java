@@ -17,21 +17,20 @@ import ua.kulku.onlooker.R;
 @JsonTypeName
 public class Answer {
     public static final Answer ADD_MORE = new Answer(MyApplication.getInstance().getString(R.string.add_more));
-
-    public Answer() {
-    }
-
-    public String getName() {
-        return name;
-    }
-
     @JsonProperty
     private String name;
     @JsonProperty
     private ArrayList<Input> inputs = new ArrayList<>();
 
+    public Answer() {
+    }
+
     public Answer(String name) {
         this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public Collection<Input> getInputs() {
@@ -45,6 +44,11 @@ public class Answer {
 
     public void addInput(Input input) {
         inputs.add(input);
+        Data.save();
+    }
+
+    public void removeInput(Input input) {
+        inputs.remove(input);
         Data.save();
     }
 }

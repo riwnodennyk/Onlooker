@@ -20,4 +20,5 @@
     <string name="invalid_age">Недійсний вік</string>
     <string name="title_activity_answers_list">AnswersListActivity</string>
     <string name="deleted_template">Видалено %s</string>
+    <string name="answers_list">Перелік відповідей</string>
 </resources>

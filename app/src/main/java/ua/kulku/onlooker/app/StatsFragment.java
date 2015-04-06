@@ -1,5 +1,6 @@
 package ua.kulku.onlooker.app;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,6 +22,9 @@ import ua.kulku.onlooker.model.Question;
  */
 public class StatsFragment extends Fragment {
 
+    private static final int RC_ANSWERS_LIST = 26;
+    private TextView mTextView;
+
     public StatsFragment() {
     }
 
@@ -39,6 +43,11 @@ public class StatsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mTextView = (TextView) view.findViewById(R.id.text_stats);
+        setupList();
+    }
+
+    private void setupList() {
         StringBuilder sb = new StringBuilder();
         for (Question question : Data.getAll()) {
             sb.append(question.getName()).append(":\n\n");
@@ -49,8 +58,7 @@ public class StatsFragment extends Fragment {
             }
             sb.append("\n\n\n");
         }
-        String text = sb.toString();
-        ((TextView) view.findViewById(R.id.text_stats)).setText(text);
+        mTextView.setText(sb.toString());
     }
 
     @Override
@@ -66,11 +74,22 @@ public class StatsFragment extends Fragment {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             Intent intent = new Intent(getActivity(), AnswersListActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, RC_ANSWERS_LIST);
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case RC_ANSWERS_LIST:
+                    setupList();
+                    break;
+            }
 
+        }
+    }
 }
