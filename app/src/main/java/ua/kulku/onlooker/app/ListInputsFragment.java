@@ -16,28 +16,40 @@ import android.widget.Toast;
 import com.github.brnunes.swipeablerecyclerview.SwipeableRecyclerViewTouchListener;
 import com.github.brnunes.swipeablerecyclerview.SwipeableRecyclerViewTouchListener.SwipeListener;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.GregorianCalendar;
+import java.util.List;
+
 import ua.kulku.onlooker.R;
-import ua.kulku.onlooker.adapter.InputAdapter;
+import ua.kulku.onlooker.adapter.ListInputsAdapter;
+import ua.kulku.onlooker.adapter.ListInputsAdapter.Item;
+import ua.kulku.onlooker.model.Answer;
+import ua.kulku.onlooker.model.Data;
+import ua.kulku.onlooker.model.Input;
+import ua.kulku.onlooker.model.Question;
 
-public class AnswersListFragment extends Fragment {
+public class ListInputsFragment extends Fragment {
 
-    private InputAdapter mAdapter;
+    private ListInputsAdapter mAdapter;
 
-    public AnswersListFragment() {
+    public ListInputsFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_answers_list, container, false);
+        return inflater.inflate(R.layout.fragment_list_inputs, container, false);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.answers_recycle_view);
-        mAdapter = new InputAdapter();
+        RecyclerView recyclerView = (RecyclerView) getView();
+
+        mAdapter = new ListInputsAdapter(getItems());
         recyclerView.setAdapter(mAdapter);
         recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             private Drawable mDivider = getActivity().getResources().getDrawable(android.R.drawable.divider_horizontal_bright);
@@ -76,6 +88,34 @@ public class AnswersListFragment extends Fragment {
 
     }
 
+    private List<Item> getItems() {
+        ArrayList<Item> items = new ArrayList<>();
+        for (Question question : Data.getAll()) {
+            for (Answer answer : question.getPossibleAnswers()) {
+                for (Input input : answer.getInputs()) {
+                    Item object = new Item();
+                    object.question = question;
+                    object.answer = answer;
+                    object.input = input;
+                    items.add(object);
+                }
+            }
+        }
+        Collections.sort(items, new Comparator<Item>() {
+            @Override
+            public int compare(Item lhs, Item rhs) {
+                GregorianCalendar thisData = lhs.input.getCreateDate();
+                GregorianCalendar thatDate = rhs.input.getCreateDate();
+                if (thisData == null && thatDate == null) return 0;
+                if (thisData == null) return -1;
+                if (thatDate == null) return 1;
+                return thisData.compareTo(thatDate);
+            }
+        });
+        Collections.reverse(items);
+        return items;
+    }
+
     private class MySwipeListener implements SwipeListener {
         @Override
         public boolean canSwipe(int position) {
@@ -89,7 +129,7 @@ public class AnswersListFragment extends Fragment {
 
         private void onDismissedBySwipe(int[] reverseSortedPositions) {
             for (int position : reverseSortedPositions) {
-                InputAdapter.Item removed = mAdapter.remove(position);
+                Item removed = mAdapter.remove(position);
                 removed.answer.removeInput(removed.input);
                 mAdapter.notifyItemRemoved(position);
                 Toast.makeText(getActivity(),

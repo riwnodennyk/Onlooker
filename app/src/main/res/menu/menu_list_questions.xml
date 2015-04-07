@@ -1,10 +1,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:tools="http://schemas.android.com/tools"
-      tools:context="ua.kulku.onlooker.app.StatsActivity">
+      tools:context="ua.kulku.onlooker.app.ListQuestionsActivity">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_answers_list_questions"
         android:icon="@drawable/ic_action_content_send"
         android:orderInCategory="100"
         android:showAsAction="never"
-        android:title="@string/action_settings"/>
+        android:title="@string/answers_list"/>
 </menu>

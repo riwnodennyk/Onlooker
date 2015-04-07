@@ -6,12 +6,12 @@ import android.os.Bundle;
 
 import ua.kulku.onlooker.R;
 
-public class AnswersListActivity extends Activity {
+public class ListInputsActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_answers_list);
+        setContentView(R.layout.activity_list_inputs);
         ActionBar actionBar = getActionBar();
         if (actionBar != null)
             actionBar.setTitle(R.string.answers_list);

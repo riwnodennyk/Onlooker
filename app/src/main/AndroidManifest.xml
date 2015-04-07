@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".app.StatsActivity"
+            android:name=".app.ListQuestionsActivity"
             android:label="@string/title_activity_stats"
             android:parentActivityName=".app.InputActivity" >
             <meta-data
@@ -27,12 +27,12 @@
                 android:value="ua.kulku.onlooker.app.InputActivity" />
         </activity>
         <activity
-            android:name=".app.AnswersListActivity"
+            android:name=".app.ListInputsActivity"
             android:label="@string/title_activity_answers_list"
-            android:parentActivityName=".app.StatsActivity" >
+            android:parentActivityName=".app.ListQuestionsActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ua.kulku.onlooker.app.StatsActivity" />
+                android:value=".app.ListQuestionsActivity" />
         </activity>
     </application>
 

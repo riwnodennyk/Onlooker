@@ -4,28 +4,31 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+
+import java.util.List;
 
 import ua.kulku.onlooker.R;
-import ua.kulku.onlooker.model.Answer;
+import ua.kulku.onlooker.adapter.ListQuestionsAdapter;
 import ua.kulku.onlooker.model.Data;
 import ua.kulku.onlooker.model.Question;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class StatsFragment extends Fragment {
+public class ListQuestionsFragment extends Fragment {
 
     private static final int RC_ANSWERS_LIST = 26;
-    private TextView mTextView;
+    private ListQuestionsAdapter mAdapter;
 
-    public StatsFragment() {
+    public ListQuestionsFragment() {
     }
 
     @Override
@@ -37,33 +40,23 @@ public class StatsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_stats, container, false);
+        return inflater.inflate(R.layout.fragment_list_questions, container, false);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mTextView = (TextView) view.findViewById(R.id.text_stats);
-        setupList();
-    }
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list_answers_stats);
 
-    private void setupList() {
-        StringBuilder sb = new StringBuilder();
-        for (Question question : Data.getAll()) {
-            sb.append(question.getName()).append(":\n\n");
-            int inputsCount = question.getInputsCount();
-            for (Answer answer : question.getPossibleAnswers()) {
-                int percent = (int) (100 * (answer.getInputs().size()) / (float) inputsCount);
-                sb.append(answer.getName()).append("        ").append(percent).append("%\n");
-            }
-            sb.append("\n\n\n");
-        }
-        mTextView.setText(sb.toString());
+        List<Question> questions = Data.getAll();
+        mAdapter = new ListQuestionsAdapter(questions);
+        recyclerView.setAdapter(mAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_stats, menu);
+        inflater.inflate(R.menu.menu_list_questions, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -72,8 +65,8 @@ public class StatsFragment extends Fragment {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Intent intent = new Intent(getActivity(), AnswersListActivity.class);
+        if (id == R.id.action_answers_list_questions) {
+            Intent intent = new Intent(getActivity(), ListInputsActivity.class);
             startActivityForResult(intent, RC_ANSWERS_LIST);
             return true;
         }
@@ -86,7 +79,12 @@ public class StatsFragment extends Fragment {
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case RC_ANSWERS_LIST:
-                    setupList();
+                    RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.answers_recycle_view);
+
+                    List<Question> questions = Data.getAll();
+                    mAdapter = new ListQuestionsAdapter(questions);
+                    recyclerView.setAdapter(mAdapter);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
                     break;
             }
 

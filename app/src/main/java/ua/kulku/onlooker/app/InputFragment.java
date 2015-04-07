@@ -19,8 +19,8 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import ua.kulku.onlooker.R;
-import ua.kulku.onlooker.adapter.AnswerAdapter;
-import ua.kulku.onlooker.adapter.TypesAdapter;
+import ua.kulku.onlooker.adapter.SpinnerAnswerAdapter;
+import ua.kulku.onlooker.adapter.SpinnerQuestionAdapter;
 import ua.kulku.onlooker.model.Answer;
 import ua.kulku.onlooker.model.Data;
 import ua.kulku.onlooker.model.Gender;
@@ -33,22 +33,10 @@ import ua.kulku.onlooker.model.Question;
 public class InputFragment extends Fragment {
     private static final int RC_CREATE_NEW_ANSWER = 21234;
     private static final int RC_CREATE_NEW_TYPE = 961;
-    //    private static final String INPUT_SS = "input saved state";
-    //    private Input mInput;
     private TextView mAgeTextView;
     private Spinner mQuestionSpinner;
     private RadioGroup mGenderView;
     private Spinner mAnswerSpinner;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-//        if (savedInstanceState == null) {
-//            mInput = new Input();
-//        } else {
-//            mInput = (Input) savedInstanceState.getSerializable(INPUT_SS);
-//        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -70,7 +58,7 @@ public class InputFragment extends Fragment {
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(getActivity(), StatsActivity.class);
+                        Intent intent = new Intent(getActivity(), ListQuestionsActivity.class);
                         startActivity(intent);
                     }
                 });
@@ -109,7 +97,7 @@ public class InputFragment extends Fragment {
     private void setupQuestionSpinner() {
         List<Question> questions = new ArrayList<>(Data.getAll());
         questions.add(Question.ADD_MORE);
-        final TypesAdapter adapter = new TypesAdapter(getActivity(), questions);
+        final SpinnerQuestionAdapter adapter = new SpinnerQuestionAdapter(getActivity(), questions);
         mQuestionSpinner.setAdapter(adapter);
         mQuestionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -133,7 +121,7 @@ public class InputFragment extends Fragment {
         Question selectedQuestion = ((Question) mQuestionSpinner.getSelectedItem());
         List<Answer> possibleAnswers = new ArrayList<>(selectedQuestion.getPossibleAnswers());
         possibleAnswers.add(Answer.ADD_MORE);
-        final AnswerAdapter adapter = new AnswerAdapter(getActivity(), possibleAnswers);
+        final SpinnerAnswerAdapter adapter = new SpinnerAnswerAdapter(getActivity(), possibleAnswers);
         mAnswerSpinner.setAdapter(adapter);
         mAnswerSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

@@ -5,14 +5,9 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import ua.kulku.onlooker.model.Answer;
-import ua.kulku.onlooker.model.Data;
 import ua.kulku.onlooker.model.Input;
 import ua.kulku.onlooker.model.Question;
 
@@ -20,35 +15,11 @@ import ua.kulku.onlooker.model.Question;
  * Created by andrii.lavrinenko on 06.04.2015.
  */
 @SuppressWarnings("Convert2Lambda")
-public class InputAdapter extends RecyclerView.Adapter<InputAdapter.MyViewHolder> {
+public class ListInputsAdapter extends RecyclerView.Adapter<ListInputsAdapter.MyViewHolder> {
     private final List<Item> mItems;
 
-    public InputAdapter() {
-        mItems = new ArrayList<>();
-
-        for (Question question : Data.getAll()) {
-            for (Answer answer : question.getPossibleAnswers()) {
-                for (Input input : answer.getInputs()) {
-                    Item object = new Item();
-                    object.question = question;
-                    object.answer = answer;
-                    object.input = input;
-                    mItems.add(object);
-                }
-            }
-        }
-        Collections.sort(mItems, new Comparator<Item>() {
-            @Override
-            public int compare(Item lhs, Item rhs) {
-                GregorianCalendar thisData = lhs.input.getCreateDate();
-                GregorianCalendar thatDate = rhs.input.getCreateDate();
-                if (thisData == null && thatDate == null) return 0;
-                if (thisData == null) return -1;
-                if (thatDate == null) return 1;
-                return thisData.compareTo(thatDate);
-            }
-        });
-        Collections.reverse(mItems);
+    public ListInputsAdapter(List<Item> items) {
+        mItems = items;
     }
 
     @Override

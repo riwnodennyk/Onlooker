@@ -5,15 +5,15 @@ import android.widget.ArrayAdapter;
 
 import java.util.List;
 
-import ua.kulku.onlooker.model.Answer;
+import ua.kulku.onlooker.model.Question;
 
 /**
  * Created by andrii.lavrinenko on 15.03.2015.
  */
-public class AnswerAdapter extends ArrayAdapter<Answer> {
+public class SpinnerQuestionAdapter extends ArrayAdapter<Question> {
 
-    public AnswerAdapter(Context context, List<Answer> activityTypes) {
-        super(context, android.R.layout.simple_spinner_item, activityTypes);
+    public SpinnerQuestionAdapter(Context context, List<Question> activities) {
+        super(context, android.R.layout.simple_spinner_item, activities);
         setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     }
 }
