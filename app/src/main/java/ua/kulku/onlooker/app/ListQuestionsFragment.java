@@ -13,8 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.List;
-
 import ua.kulku.onlooker.R;
 import ua.kulku.onlooker.adapter.ListQuestionsAdapter;
 import ua.kulku.onlooker.model.Data;
@@ -26,7 +24,6 @@ import ua.kulku.onlooker.model.Question;
 public class ListQuestionsFragment extends Fragment {
 
     private static final int RC_ANSWERS_LIST = 26;
-    private ListQuestionsAdapter mAdapter;
 
     public ListQuestionsFragment() {
     }
@@ -46,12 +43,7 @@ public class ListQuestionsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list_answers_stats);
-
-        List<Question> questions = Data.getAll();
-        mAdapter = new ListQuestionsAdapter(questions);
-        recyclerView.setAdapter(mAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        setAdapter();
     }
 
     @Override
@@ -66,11 +58,15 @@ public class ListQuestionsFragment extends Fragment {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_answers_list_questions) {
-            Intent intent = new Intent(getActivity(), ListInputsActivity.class);
-            startActivityForResult(intent, RC_ANSWERS_LIST);
+            startInputs(null);
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void startInputs(Question question) {
+        Intent intent = new Intent(getActivity(), ListInputsActivity.class);
+        startActivityForResult(intent, RC_ANSWERS_LIST);
     }
 
     @Override
@@ -79,15 +75,27 @@ public class ListQuestionsFragment extends Fragment {
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case RC_ANSWERS_LIST:
-                    RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.answers_recycle_view);
-
-                    List<Question> questions = Data.getAll();
-                    mAdapter = new ListQuestionsAdapter(questions);
-                    recyclerView.setAdapter(mAdapter);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+                    setAdapter();
                     break;
             }
 
         }
+    }
+
+    private void setAdapter() {
+        RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.list_answers_stats);
+        ListQuestionsAdapter adapter = new ListQuestionsAdapter(Data.getAllQuestions()) {
+            @Override
+            protected boolean onMenuItemClick(MenuItem item, Question question) {
+                switch (item.getItemId()) {
+                    case R.id.action_answers_list_questions:
+                        startInputs(question);
+                        return true;
+                }
+                return false;
+            }
+        };
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
     }
 }

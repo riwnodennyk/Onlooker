@@ -17,7 +17,7 @@ public final class Data {
     private static final String SHARED_PREF_KEY = "questions in storage";
     private static ArrayList<Question> sQuestions;
 
-    public static List<Question> getAll() {
+    public static List<Question> getAllQuestions() {
         restoreIfNeeded();
         return Collections.unmodifiableList(sQuestions);
     }

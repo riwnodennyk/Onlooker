@@ -74,7 +74,7 @@ public class InputFragment extends Fragment {
                     Question question = new Question(name);
                     Data.add(question);
                     setupQuestionSpinner();
-                    mQuestionSpinner.setSelection(Data.getAll().indexOf(question));
+                    mQuestionSpinner.setSelection(Data.getAllQuestions().indexOf(question));
                     break;
                 }
                 case RC_CREATE_NEW_ANSWER: {
@@ -95,7 +95,7 @@ public class InputFragment extends Fragment {
     }
 
     private void setupQuestionSpinner() {
-        List<Question> questions = new ArrayList<>(Data.getAll());
+        List<Question> questions = new ArrayList<>(Data.getAllQuestions());
         questions.add(Question.ADD_MORE);
         final SpinnerQuestionAdapter adapter = new SpinnerQuestionAdapter(getActivity(), questions);
         mQuestionSpinner.setAdapter(adapter);

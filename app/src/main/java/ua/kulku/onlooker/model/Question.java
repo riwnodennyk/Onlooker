@@ -34,6 +34,16 @@ public class Question {
     public Question() {
     }
 
+    public String getAnswerStats() {
+        StringBuilder sb = new StringBuilder();
+        int inputsCount = getInputsCount();
+        for (Answer answer : getPossibleAnswers()) {
+            int percent = (int) (100 * (answer.getInputs().size()) / (float) inputsCount);
+            sb.append(answer.getName()).append("        ").append(percent).append("%\n");
+        }
+        return sb.toString();
+    }
+
     public String getName() {
         return name;
     }

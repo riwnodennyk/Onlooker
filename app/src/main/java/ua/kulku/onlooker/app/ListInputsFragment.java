@@ -51,34 +51,7 @@ public class ListInputsFragment extends Fragment {
 
         mAdapter = new ListInputsAdapter(getItems());
         recyclerView.setAdapter(mAdapter);
-        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
-            private Drawable mDivider = getActivity().getResources().getDrawable(android.R.drawable.divider_horizontal_bright);
-
-            @Override
-            public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
-                super.onDraw(c, parent, state);
-                final int left = parent.getPaddingLeft();
-                final int right = parent.getWidth() - parent.getPaddingRight();
-
-                final int childCount = parent.getChildCount();
-                for (int i = 0; i < childCount; i++) {
-                    final View child = parent.getChildAt(i);
-                    final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child
-                            .getLayoutParams();
-                    final int top = child.getBottom() + params.bottomMargin;
-                    final int bottom = top + mDivider.getIntrinsicHeight();
-                    mDivider.setBounds(left, top, right, bottom);
-                    mDivider.draw(c);
-                }
-            }
-
-            @Override
-            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-                super.getItemOffsets(outRect, view, parent, state);
-                outRect.set(0, 0, 0, mDivider.getIntrinsicHeight());
-            }
-
-        });
+        recyclerView.addItemDecoration(new DividerDecoration());
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
 
         SwipeableRecyclerViewTouchListener swipeTouchListener =
@@ -90,7 +63,7 @@ public class ListInputsFragment extends Fragment {
 
     private List<Item> getItems() {
         ArrayList<Item> items = new ArrayList<>();
-        for (Question question : Data.getAll()) {
+        for (Question question : Data.getAllQuestions()) {
             for (Answer answer : question.getPossibleAnswers()) {
                 for (Input input : answer.getInputs()) {
                     Item object = new Item();
@@ -144,5 +117,34 @@ public class ListInputsFragment extends Fragment {
         public void onDismissedBySwipeRight(RecyclerView recyclerView, int[] reverseSortedPositions) {
             onDismissedBySwipe(reverseSortedPositions);
         }
+    }
+
+    private class DividerDecoration extends RecyclerView.ItemDecoration {
+        private Drawable mDivider = getActivity().getResources().getDrawable(android.R.drawable.divider_horizontal_bright);
+
+        @Override
+        public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+            super.onDraw(c, parent, state);
+            final int left = parent.getPaddingLeft();
+            final int right = parent.getWidth() - parent.getPaddingRight();
+
+            final int childCount = parent.getChildCount();
+            for (int i = 0; i < childCount; i++) {
+                final View child = parent.getChildAt(i);
+                final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child
+                        .getLayoutParams();
+                final int top = child.getBottom() + params.bottomMargin;
+                final int bottom = top + mDivider.getIntrinsicHeight();
+                mDivider.setBounds(left, top, right, bottom);
+                mDivider.draw(c);
+            }
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            super.getItemOffsets(outRect, view, parent, state);
+            outRect.set(0, 0, 0, mDivider.getIntrinsicHeight());
+        }
+
     }
 }
