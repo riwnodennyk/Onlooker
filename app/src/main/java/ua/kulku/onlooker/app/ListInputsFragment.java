@@ -1,5 +1,6 @@
 package ua.kulku.onlooker.app;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.graphics.Canvas;
@@ -17,10 +18,12 @@ import com.github.brnunes.swipeablerecyclerview.SwipeableRecyclerViewTouchListen
 import com.github.brnunes.swipeablerecyclerview.SwipeableRecyclerViewTouchListener.SwipeListener;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.UUID;
 
 import ua.kulku.onlooker.R;
 import ua.kulku.onlooker.adapter.ListInputsAdapter;
@@ -48,8 +51,14 @@ public class ListInputsFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         RecyclerView recyclerView = (RecyclerView) getView();
-
-        mAdapter = new ListInputsAdapter(getItems());
+        UUID id = (UUID) getActivity().getIntent().getExtras().getSerializable(ListInputsActivity.E_QUESTION_ID);
+        Question question = Data.getQuestionById(id);
+        if (question == null)
+            throw new IllegalArgumentException("ListInputsActivity.E_QUESTION_ID not found in the retained IDs list.");
+        ActionBar actionBar = getActivity().getActionBar();
+        if (actionBar != null)
+            actionBar.setTitle(question.getName());
+        mAdapter = new ListInputsAdapter(getItems(question.getPossibleAnswers()));
         recyclerView.setAdapter(mAdapter);
         recyclerView.addItemDecoration(new DividerDecoration());
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
@@ -61,17 +70,14 @@ public class ListInputsFragment extends Fragment {
 
     }
 
-    private List<Item> getItems() {
+    private List<Item> getItems(Collection<Answer> possibleAnswers) {
         ArrayList<Item> items = new ArrayList<>();
-        for (Question question : Data.getAllQuestions()) {
-            for (Answer answer : question.getPossibleAnswers()) {
-                for (Input input : answer.getInputs()) {
-                    Item object = new Item();
-                    object.question = question;
-                    object.answer = answer;
-                    object.input = input;
-                    items.add(object);
-                }
+        for (Answer answer : possibleAnswers) {
+            for (Input input : answer.getInputs()) {
+                Item object = new Item();
+                object.answer = answer;
+                object.input = input;
+                items.add(object);
             }
         }
         Collections.sort(items, new Comparator<Item>() {

@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import ua.kulku.onlooker.model.Answer;
@@ -43,11 +45,11 @@ public class ListInputsAdapter extends RecyclerView.Adapter<ListInputsAdapter.My
 
     public static class Item {
         public Input input;
-        public Question question;
         public Answer answer;
 
         public String getString() {
-            return question.getName() + ": " + answer.getName();
+            String formattedData = input.getCreateDate() == null ? "?" : SimpleDateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(input.getCreateDate().getTime());
+            return formattedData + ": " + answer.getName();
         }
     }
 

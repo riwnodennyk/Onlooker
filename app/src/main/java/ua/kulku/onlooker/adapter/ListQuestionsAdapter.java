@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ua.kulku.onlooker.R;
@@ -17,7 +18,7 @@ public abstract class ListQuestionsAdapter extends RecyclerView.Adapter<ListQues
     private final List<Question> mQuestions;
 
     public ListQuestionsAdapter(List<Question> questions) {
-        mQuestions = questions;
+        mQuestions = new ArrayList<>(questions);
     }
 
     @Override
@@ -44,6 +45,10 @@ public abstract class ListQuestionsAdapter extends RecyclerView.Adapter<ListQues
     @Override
     public int getItemCount() {
         return mQuestions.size();
+    }
+
+    public void remove(Question question) {
+        mQuestions.remove(question);
     }
 
     static class MyViewHolder extends RecyclerView.ViewHolder {

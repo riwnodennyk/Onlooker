@@ -8,13 +8,12 @@ import ua.kulku.onlooker.R;
 
 public class ListInputsActivity extends Activity {
 
+    public static final java.lang.String E_QUESTION_ID = "extra question";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_inputs);
-        ActionBar actionBar = getActionBar();
-        if (actionBar != null)
-            actionBar.setTitle(R.string.answers_list);
     }
 
 

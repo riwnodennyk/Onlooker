@@ -3,8 +3,12 @@
       tools:context="ua.kulku.onlooker.app.ListQuestionsActivity">
     <item
         android:id="@+id/action_answers_list_questions"
-        android:icon="@drawable/ic_action_content_send"
         android:orderInCategory="100"
         android:showAsAction="never"
         android:title="@string/answers_list"/>
+    <item
+        android:id="@+id/action_remove_questions"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/remove"/>
 </menu>

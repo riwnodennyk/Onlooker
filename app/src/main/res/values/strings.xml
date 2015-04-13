@@ -16,9 +16,10 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_input">Створення</string>
-    <string name="title_activity_stats">Статистика</string>
+    <string name="title_activity_list_questions">Питання</string>
     <string name="invalid_age">Недійсний вік</string>
     <string name="title_activity_answers_list">AnswersListActivity</string>
     <string name="deleted_template">Видалено %s</string>
     <string name="answers_list">Перелік відповідей</string>
+    <string name="remove">Видалити</string>
 </resources>

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import static ua.kulku.onlooker.Jackson.sObjectMapper;
 import static ua.kulku.onlooker.MyApplication.getSharedPreferences;
@@ -25,6 +26,12 @@ public final class Data {
     public static void add(Question question) {
         restoreIfNeeded();
         sQuestions.add(question);
+        Data.save();
+    }
+
+    public static void remove(Question question) {
+        restoreIfNeeded();
+        sQuestions.remove(question);
         Data.save();
     }
 
@@ -50,5 +57,13 @@ public final class Data {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+    }
+
+    public static Question getQuestionById(UUID id) {
+        for (Question question : getAllQuestions()) {
+            if (question.getId().equals(id))
+                return question;
+        }
+        return null;
     }
 }

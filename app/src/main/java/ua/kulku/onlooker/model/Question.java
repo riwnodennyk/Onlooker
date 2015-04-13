@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.UUID;
 
 import ua.kulku.onlooker.MyApplication;
 import ua.kulku.onlooker.R;
@@ -22,16 +23,30 @@ public class Question {
             throw new UnsupportedOperationException();
         }
     };
+
+    public UUID getId() {
+        return id;
+    }
+
+    @JsonProperty
+    private UUID id;
     @JsonProperty
     private String name;
     @JsonProperty
     private ArrayList<Answer> possibleAnswers = new ArrayList<>();
 
     public Question(String name) {
+        this.id = UUID.randomUUID();
         this.name = name;
     }
 
     public Question() {
+        upgrade();
+    }
+
+    private void upgrade() {
+        if (id == null)
+            id = UUID.randomUUID();
     }
 
     public String getAnswerStats() {

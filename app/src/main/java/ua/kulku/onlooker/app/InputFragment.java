@@ -27,12 +27,15 @@ import ua.kulku.onlooker.model.Gender;
 import ua.kulku.onlooker.model.Input;
 import ua.kulku.onlooker.model.Question;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * A placeholder fragment containing a simple view.
  */
 public class InputFragment extends Fragment {
     private static final int RC_CREATE_NEW_ANSWER = 21234;
     private static final int RC_CREATE_NEW_TYPE = 961;
+    private static final int RC_LIST_QUESTIONS = 72;
     private TextView mAgeTextView;
     private Spinner mQuestionSpinner;
     private RadioGroup mGenderView;
@@ -59,7 +62,7 @@ public class InputFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(getActivity(), ListQuestionsActivity.class);
-                        startActivity(intent);
+                        startActivityForResult(intent, RC_LIST_QUESTIONS);
                     }
                 });
     }
@@ -67,7 +70,7 @@ public class InputFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == android.app.Activity.RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case RC_CREATE_NEW_TYPE: {
                     String name = data.getStringExtra(CreateDialog.NAME_R);
@@ -85,6 +88,11 @@ public class InputFragment extends Fragment {
                     break;
                 }
             }
+        }
+        switch (requestCode) {
+            case RC_LIST_QUESTIONS:
+                setupQuestionSpinner();
+                break;
         }
     }
 

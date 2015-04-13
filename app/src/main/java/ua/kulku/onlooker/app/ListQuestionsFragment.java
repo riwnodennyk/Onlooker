@@ -46,26 +46,10 @@ public class ListQuestionsFragment extends Fragment {
         setAdapter();
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_list_questions, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_answers_list_questions) {
-            startInputs(null);
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     private void startInputs(Question question) {
-        Intent intent = new Intent(getActivity(), ListInputsActivity.class);
+        Intent intent = new Intent(getActivity(), ListInputsActivity.class)
+                .putExtra(ListInputsActivity.E_QUESTION_ID, question.getId());
+
         startActivityForResult(intent, RC_ANSWERS_LIST);
     }
 
@@ -78,18 +62,22 @@ public class ListQuestionsFragment extends Fragment {
                     setAdapter();
                     break;
             }
-
         }
     }
 
     private void setAdapter() {
         RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.list_answers_stats);
-        ListQuestionsAdapter adapter = new ListQuestionsAdapter(Data.getAllQuestions()) {
+        final ListQuestionsAdapter adapter = new ListQuestionsAdapter(Data.getAllQuestions()) {
             @Override
             protected boolean onMenuItemClick(MenuItem item, Question question) {
                 switch (item.getItemId()) {
                     case R.id.action_answers_list_questions:
                         startInputs(question);
+                        return true;
+                    case R.id.action_remove_questions:
+                        this.remove(question);
+                        notifyDataSetChanged();
+                        Data.remove(question);
                         return true;
                 }
                 return false;
