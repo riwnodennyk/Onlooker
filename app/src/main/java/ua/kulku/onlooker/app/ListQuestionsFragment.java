@@ -1,7 +1,9 @@
 package ua.kulku.onlooker.app;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -69,15 +71,29 @@ public class ListQuestionsFragment extends Fragment {
         RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.list_answers_stats);
         final ListQuestionsAdapter adapter = new ListQuestionsAdapter(Data.getAllQuestions()) {
             @Override
-            protected boolean onMenuItemClick(MenuItem item, Question question) {
+            protected boolean onMenuItemClick(MenuItem item, final Question question) {
                 switch (item.getItemId()) {
                     case R.id.action_answers_list_questions:
                         startInputs(question);
                         return true;
                     case R.id.action_remove_questions:
-                        this.remove(question);
-                        notifyDataSetChanged();
-                        Data.remove(question);
+                        new AlertDialog.Builder(getActivity())
+                                .setTitle(question.getName())
+                                .setMessage(R.string.want_to_remove_question)
+                                .setPositiveButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        //nothing to do. cancelled
+                                    }
+                                })
+                                .setNegativeButton(R.string.remove, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        remove(question);
+                                        notifyDataSetChanged();
+                                        Data.remove(question);
+                                    }
+                                }).show();
                         return true;
                 }
                 return false;
