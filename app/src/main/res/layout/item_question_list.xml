@@ -35,7 +35,7 @@
             android:textAppearance="?android:textAppearanceLarge"
             android:textColor="@android:color/white"
             android:textStyle="bold"
-            tools:text="Мова парканів та наліпочок"/>
+            tools:text="(21) Мова парканів та наліпочок"/>
 
         <TextView
             android:id="@+id/answers_item_question_list"

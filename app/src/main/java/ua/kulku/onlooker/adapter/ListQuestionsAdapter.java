@@ -30,7 +30,7 @@ public abstract class ListQuestionsAdapter extends RecyclerView.Adapter<ListQues
     public void onBindViewHolder(MyViewHolder myViewHolder, final int position) {
         final Question question = mQuestions.get(position);
 
-        myViewHolder.title.setText(question.getName());
+        myViewHolder.title.setText("(" + question.getInputsCount() + ") " + question.getName());
         myViewHolder.answers.setText(question.getAnswerStats());
         myViewHolder.popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
