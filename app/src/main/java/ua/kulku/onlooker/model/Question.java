@@ -82,7 +82,6 @@ public class Question {
 
     public void addPossibleAnswer(Answer answer) {
         possibleAnswers.add(answer);
-        Data.save();
     }
 
 }

@@ -1,6 +1,6 @@
 package ua.kulku.onlooker;
 
-import android.content.SharedPreferences;
+import com.squareup.leakcanary.LeakCanary;
 
 /**
  * Created by andrii.lavrinenko on 07.03.2015.
@@ -12,13 +12,10 @@ public class MyApplication extends android.app.Application {
         return sInstance;
     }
 
-    public static SharedPreferences getSharedPreferences() {
-        return getInstance().getSharedPreferences("ModelStorage", MODE_PRIVATE);
-    }
-
     @Override
     public void onCreate() {
         super.onCreate();
+        LeakCanary.install(this);
         sInstance = this;
     }
 }

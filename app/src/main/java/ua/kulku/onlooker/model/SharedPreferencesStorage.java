@@ -1,5 +1,8 @@
 package ua.kulku.onlooker.model;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.io.IOException;
@@ -8,34 +11,50 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+import ua.kulku.onlooker.MyApplication;
+
 import static ua.kulku.onlooker.Jackson.sObjectMapper;
-import static ua.kulku.onlooker.MyApplication.getSharedPreferences;
 
 /**
  * Created by aindrias on 18.03.2015.
  */
-public final class Data {
+@Singleton
+public class SharedPreferencesStorage implements Storage {
     private static final String SHARED_PREF_KEY = "questions in storage";
-    private static ArrayList<Question> sQuestions;
+    private final Context mContext;
+    private ArrayList<Question> sQuestions;
 
-    public static List<Question> getAllQuestions() {
+    @Inject
+    @Singleton
+    public SharedPreferencesStorage(Context context) {
+        mContext = context;
+    }
+
+    private SharedPreferences getSharedPreferences() {
+        return mContext.getSharedPreferences("ModelStorage", MyApplication.MODE_PRIVATE);
+    }
+
+    public List<Question> getAllQuestions() {
         restoreIfNeeded();
         return Collections.unmodifiableList(sQuestions);
     }
 
-    public static void add(Question question) {
+    public void add(Question question) {
         restoreIfNeeded();
         sQuestions.add(question);
-        Data.save();
+        save();
     }
 
-    public static void remove(Question question) {
+    public void remove(Question question) {
         restoreIfNeeded();
         sQuestions.remove(question);
-        Data.save();
+        save();
     }
 
-    private static void restoreIfNeeded() {
+    private void restoreIfNeeded() {
         if (sQuestions == null) {
             try {
                 String questionsJson = getSharedPreferences().getString(SHARED_PREF_KEY, "[]");
@@ -49,7 +68,7 @@ public final class Data {
         }
     }
 
-    static void save() {
+    public void save() {
         try {
             String questionsJson = sObjectMapper.writeValueAsString(sQuestions);
             getSharedPreferences().edit()
@@ -60,7 +79,7 @@ public final class Data {
         }
     }
 
-    public static Question getQuestionById(UUID id) {
+    public Question getQuestionById(UUID id) {
         for (Question question : getAllQuestions()) {
             if (question.getId().equals(id))
                 return question;

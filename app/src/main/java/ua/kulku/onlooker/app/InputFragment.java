@@ -21,11 +21,12 @@ import java.util.List;
 import ua.kulku.onlooker.R;
 import ua.kulku.onlooker.adapter.SpinnerAnswerAdapter;
 import ua.kulku.onlooker.adapter.SpinnerQuestionAdapter;
+import ua.kulku.onlooker.di.DaggerStorageComponent;
 import ua.kulku.onlooker.model.Answer;
-import ua.kulku.onlooker.model.Data;
 import ua.kulku.onlooker.model.Gender;
 import ua.kulku.onlooker.model.Input;
 import ua.kulku.onlooker.model.Question;
+import ua.kulku.onlooker.model.Storage;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -36,10 +37,18 @@ public class InputFragment extends Fragment {
     private static final int RC_CREATE_NEW_ANSWER = 21234;
     private static final int RC_CREATE_NEW_TYPE = 961;
     private static final int RC_LIST_QUESTIONS = 72;
+    Storage storage;
     private TextView mAgeTextView;
     private Spinner mQuestionSpinner;
     private RadioGroup mGenderView;
     private Spinner mAnswerSpinner;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        storage = DaggerStorageComponent.create().storage();
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,15 +84,16 @@ public class InputFragment extends Fragment {
                 case RC_CREATE_NEW_TYPE: {
                     String name = data.getStringExtra(CreateDialog.NAME_R);
                     Question question = new Question(name);
-                    Data.add(question);
+                    storage.add(question);
                     setupQuestionSpinner();
-                    mQuestionSpinner.setSelection(Data.getAllQuestions().indexOf(question));
+                    mQuestionSpinner.setSelection(storage.getAllQuestions().indexOf(question));
                     break;
                 }
                 case RC_CREATE_NEW_ANSWER: {
                     String name = data.getStringExtra(CreateDialog.NAME_R);
                     Answer answer = new Answer(name);
                     ((Question) mQuestionSpinner.getSelectedItem()).addPossibleAnswer(answer);
+                    storage.save();
                     setupAnswerSpinner();
                     break;
                 }
@@ -103,7 +113,7 @@ public class InputFragment extends Fragment {
     }
 
     private void setupQuestionSpinner() {
-        List<Question> questions = new ArrayList<>(Data.getAllQuestions());
+        List<Question> questions = new ArrayList<>(storage.getAllQuestions());
         questions.add(Question.ADD_MORE);
         final SpinnerQuestionAdapter adapter = new SpinnerQuestionAdapter(getActivity(), questions);
         mQuestionSpinner.setAdapter(adapter);
@@ -179,6 +189,7 @@ public class InputFragment extends Fragment {
         input.setCreateDate(new GregorianCalendar());
 
         ((Answer) mAnswerSpinner.getSelectedItem()).addInput(input);
+        storage.save();
 
         mAgeTextView.setText("");
     }

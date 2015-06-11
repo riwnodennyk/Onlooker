@@ -9,16 +9,15 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import ua.kulku.onlooker.R;
 import ua.kulku.onlooker.adapter.ListQuestionsAdapter;
-import ua.kulku.onlooker.model.Data;
+import ua.kulku.onlooker.di.DaggerStorageComponent;
 import ua.kulku.onlooker.model.Question;
+import ua.kulku.onlooker.model.Storage;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -27,6 +26,8 @@ public class ListQuestionsFragment extends Fragment {
 
     private static final int RC_ANSWERS_LIST = 26;
 
+    Storage storage;
+
     public ListQuestionsFragment() {
     }
 
@@ -34,6 +35,7 @@ public class ListQuestionsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        storage = DaggerStorageComponent.create().storage();
     }
 
     @Override
@@ -69,7 +71,7 @@ public class ListQuestionsFragment extends Fragment {
 
     private void setAdapter() {
         RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.list_answers_stats);
-        final ListQuestionsAdapter adapter = new ListQuestionsAdapter(Data.getAllQuestions()) {
+        final ListQuestionsAdapter adapter = new ListQuestionsAdapter(storage.getAllQuestions()) {
             @Override
             protected boolean onMenuItemClick(MenuItem item, final Question question) {
                 switch (item.getItemId()) {
@@ -91,7 +93,7 @@ public class ListQuestionsFragment extends Fragment {
                                     public void onClick(DialogInterface dialog, int which) {
                                         remove(question);
                                         notifyDataSetChanged();
-                                        Data.remove(question);
+                                        storage.remove(question);
                                     }
                                 }).show();
                         return true;

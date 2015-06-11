@@ -28,16 +28,25 @@ import java.util.UUID;
 import ua.kulku.onlooker.R;
 import ua.kulku.onlooker.adapter.ListInputsAdapter;
 import ua.kulku.onlooker.adapter.ListInputsAdapter.Item;
+import ua.kulku.onlooker.di.DaggerStorageComponent;
 import ua.kulku.onlooker.model.Answer;
-import ua.kulku.onlooker.model.Data;
 import ua.kulku.onlooker.model.Input;
 import ua.kulku.onlooker.model.Question;
+import ua.kulku.onlooker.model.Storage;
 
 public class ListInputsFragment extends Fragment {
+
+    Storage storage;
 
     private ListInputsAdapter mAdapter;
 
     public ListInputsFragment() {
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        storage = DaggerStorageComponent.create().storage();
     }
 
     @Override
@@ -52,7 +61,7 @@ public class ListInputsFragment extends Fragment {
 
         RecyclerView recyclerView = (RecyclerView) getView();
         UUID id = (UUID) getActivity().getIntent().getExtras().getSerializable(ListInputsActivity.E_QUESTION_ID);
-        Question question = Data.getQuestionById(id);
+        Question question = storage.getQuestionById(id);
         if (question == null)
             throw new IllegalArgumentException("ListInputsActivity.E_QUESTION_ID not found in the retained IDs list.");
         ActionBar actionBar = getActivity().getActionBar();
@@ -110,6 +119,7 @@ public class ListInputsFragment extends Fragment {
             for (int position : reverseSortedPositions) {
                 Item removed = mAdapter.remove(position);
                 removed.answer.removeInput(removed.input);
+                storage.save();
                 mAdapter.notifyItemRemoved(position);
                 Toast.makeText(getActivity(),
                         getString(R.string.deleted_template, removed.getString()),

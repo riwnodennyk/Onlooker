@@ -44,11 +44,9 @@ public class Answer {
 
     public void addInput(Input input) {
         inputs.add(input);
-        Data.save();
     }
 
     public void removeInput(Input input) {
         inputs.remove(input);
-        Data.save();
     }
 }
