@@ -13,9 +13,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import ua.kulku.onlooker.MyApplication;
 import ua.kulku.onlooker.R;
 import ua.kulku.onlooker.adapter.ListQuestionsAdapter;
-import ua.kulku.onlooker.di.DaggerStorageComponent;
 import ua.kulku.onlooker.model.Question;
 import ua.kulku.onlooker.model.Storage;
 
@@ -35,7 +35,7 @@ public class ListQuestionsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        storage = DaggerStorageComponent.create().storage();
+        storage = MyApplication.sComponent.storage();
     }
 
     @Override

@@ -18,10 +18,14 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+import dagger.Component;
 import ua.kulku.onlooker.R;
 import ua.kulku.onlooker.adapter.SpinnerAnswerAdapter;
 import ua.kulku.onlooker.adapter.SpinnerQuestionAdapter;
-import ua.kulku.onlooker.di.DaggerStorageComponent;
+import ua.kulku.onlooker.di.StorageModule;
 import ua.kulku.onlooker.model.Answer;
 import ua.kulku.onlooker.model.Gender;
 import ua.kulku.onlooker.model.Input;
@@ -37,7 +41,10 @@ public class InputFragment extends Fragment {
     private static final int RC_CREATE_NEW_ANSWER = 21234;
     private static final int RC_CREATE_NEW_TYPE = 961;
     private static final int RC_LIST_QUESTIONS = 72;
+
+    @Inject
     Storage storage;
+
     private TextView mAgeTextView;
     private Spinner mQuestionSpinner;
     private RadioGroup mGenderView;
@@ -46,9 +53,8 @@ public class InputFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        storage = DaggerStorageComponent.create().storage();
+        DaggerInputFragment_FragmentComponent.create().inject(this);
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -192,5 +198,11 @@ public class InputFragment extends Fragment {
         storage.save();
 
         mAgeTextView.setText("");
+    }
+
+    @Component(modules = {StorageModule.class})
+    @Singleton
+    public interface FragmentComponent {
+        void inject(InputFragment fragment);
     }
 }

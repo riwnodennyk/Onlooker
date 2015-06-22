@@ -25,10 +25,10 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.UUID;
 
+import ua.kulku.onlooker.MyApplication;
 import ua.kulku.onlooker.R;
 import ua.kulku.onlooker.adapter.ListInputsAdapter;
 import ua.kulku.onlooker.adapter.ListInputsAdapter.Item;
-import ua.kulku.onlooker.di.DaggerStorageComponent;
 import ua.kulku.onlooker.model.Answer;
 import ua.kulku.onlooker.model.Input;
 import ua.kulku.onlooker.model.Question;
@@ -46,7 +46,7 @@ public class ListInputsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        storage = DaggerStorageComponent.create().storage();
+        storage = MyApplication.sComponent.storage();
     }
 
     @Override

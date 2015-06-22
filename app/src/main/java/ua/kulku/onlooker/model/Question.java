@@ -17,7 +17,7 @@ import ua.kulku.onlooker.R;
 @JsonTypeName
 
 public class Question {
-    public static final Question ADD_MORE = new Question(MyApplication.getInstance().getString(R.string.add_more)) {
+    public static final Question ADD_MORE = new Question(MyApplication.sInstance.getString(R.string.add_more)) {
         @Override
         public void addPossibleAnswer(Answer answer) {
             throw new UnsupportedOperationException();

@@ -16,7 +16,7 @@ import ua.kulku.onlooker.R;
 
 @JsonTypeName
 public class Answer {
-    public static final Answer ADD_MORE = new Answer(MyApplication.getInstance().getString(R.string.add_more));
+    public static final Answer ADD_MORE = new Answer(MyApplication.sInstance.getString(R.string.add_more));
     @JsonProperty
     private String name;
     @JsonProperty
