@@ -1,6 +1,5 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fab="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -8,8 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -24,32 +22,29 @@
             <TextView
                 style="@style/Label"
                 android:labelFor="@+id/type_input"
-                android:text="@string/type"
-                />
+                android:text="@string/type" />
 
             <Spinner
                 android:id="@id/type_input"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
 
             <TextView
                 style="@style/Label"
                 android:labelFor="@+id/age_input"
-                android:text="@string/age"
-                />
+                android:text="@string/age" />
 
             <EditText
                 android:id="@id/age_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number"/>
+                android:inputType="number" />
 
             <TextView
                 style="@style/Label"
                 android:labelFor="@+id/gender_input"
-                android:text="@string/gender"
-                />
+                android:text="@string/gender" />
 
             <RadioGroup
                 android:id="@id/gender_input"
@@ -61,38 +56,39 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:text="@string/male"/>
+                    android:text="@string/male" />
 
                 <RadioButton
                     android:id="@+id/female_input"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/female"/>
+                    android:text="@string/female" />
             </RadioGroup>
 
             <TextView
                 style="@style/Label"
                 android:labelFor="@+id/answer_input"
-                android:text="@string/answer"
-                />
+                android:text="@string/answer" />
 
             <Spinner
                 android:id="@id/answer_input"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
     </ScrollView>
 
-    <com.getbase.floatingactionbutton.FloatingActionButton
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/show_polls_input"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        fab:fab_colorNormal="@color/action_btn_bg"
-        fab:fab_colorPressed="@color/action_btn_bg_pressed"
-        fab:fab_icon="@drawable/ic_poll_white_48dp"/>
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_poll_white_48dp"
+        app:borderWidth="0dp"
+        app:backgroundTint="@color/action_btn_bg"
+        app:elevation="4dp"
+        app:rippleColor="@color/action_btn_bg_pressed" />
 </RelativeLayout>

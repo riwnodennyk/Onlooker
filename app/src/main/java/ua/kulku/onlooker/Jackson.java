@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
  */
 public class Jackson {
     public static ObjectMapper sObjectMapper = new ObjectMapper()
-            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+                       .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
     static {
         sObjectMapper.setVisibilityChecker(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));

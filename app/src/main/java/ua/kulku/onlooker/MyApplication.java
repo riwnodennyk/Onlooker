@@ -2,6 +2,7 @@ package ua.kulku.onlooker;
 
 import android.app.Application;
 
+import com.firebase.client.Firebase;
 import com.squareup.leakcanary.LeakCanary;
 
 import dagger.Component;
@@ -19,6 +20,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         LeakCanary.install(this);
+        Firebase.setAndroidContext(this);
         sInstance = this;
         sComponent = DaggerMyApplication_AppComponent.create();
     }

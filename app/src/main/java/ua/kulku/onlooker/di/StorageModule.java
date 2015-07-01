@@ -5,6 +5,7 @@ import android.content.Context;
 import dagger.Module;
 import dagger.Provides;
 import ua.kulku.onlooker.MyApplication;
+import ua.kulku.onlooker.model.FirebaseStorage;
 import ua.kulku.onlooker.model.SharedPreferencesStorage;
 import ua.kulku.onlooker.model.Storage;
 

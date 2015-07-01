@@ -2,9 +2,14 @@
 
     <style name="AppTheme" parent="android:Theme.Material.Light.DarkActionBar">
         <item name="android:colorAccent">#ffffd15e</item>
+        <item name="colorAccent">#ffffd15e</item>
+
         <item name="android:colorPrimary">#ff74d8d2</item>
+        <item name="colorPrimary">#ff74d8d2</item>
         <item name="android:colorPrimaryDark">#ff6bc8c2</item>
+        <item name="colorPrimaryDark">#ff6bc8c2</item>
         <item name="android:colorButtonNormal">#f00</item>
+        <item name="colorButtonNormal">#f00</item>
     </style>
 
 
