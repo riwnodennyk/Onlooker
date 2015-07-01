@@ -5,7 +5,6 @@ import android.content.Context;
 import dagger.Module;
 import dagger.Provides;
 import ua.kulku.onlooker.MyApplication;
-import ua.kulku.onlooker.model.FirebaseStorage;
 import ua.kulku.onlooker.model.SharedPreferencesStorage;
 import ua.kulku.onlooker.model.Storage;
 
@@ -18,6 +17,7 @@ public class StorageModule {
     }
 
     @Provides
+//    public Storage provideStorage(FirebaseStorage storage) {
     public Storage provideStorage(SharedPreferencesStorage storage) {
         return storage;
     }

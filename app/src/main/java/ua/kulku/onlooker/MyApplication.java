@@ -21,6 +21,7 @@ public class MyApplication extends Application {
         super.onCreate();
         LeakCanary.install(this);
         Firebase.setAndroidContext(this);
+        Firebase.getDefaultConfig().setPersistenceEnabled(true);
         sInstance = this;
         sComponent = DaggerMyApplication_AppComponent.create();
     }
