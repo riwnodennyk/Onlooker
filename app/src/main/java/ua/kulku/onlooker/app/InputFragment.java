@@ -90,10 +90,15 @@ public class InputFragment extends Fragment {
             switch (requestCode) {
                 case RC_CREATE_NEW_TYPE: {
                     String name = data.getStringExtra(CreateDialog.NAME_R);
-                    Question question = new Question(name);
+                    final Question question = new Question(name);
                     storage.add(question);
                     setupQuestionSpinner();
-                    mQuestionSpinner.setSelection(storage.getAllQuestions().indexOf(question));
+                    storage.getAllQuestions(new Storage.Callback<List<Question>>() {
+                        @Override
+                        public void onLoaded(List<Question> questions) {
+                            mQuestionSpinner.setSelection(questions.indexOf(question));
+                        }
+                    });
                     break;
                 }
                 case RC_CREATE_NEW_ANSWER: {
@@ -120,24 +125,29 @@ public class InputFragment extends Fragment {
     }
 
     private void setupQuestionSpinner() {
-        List<Question> questions = new ArrayList<>(storage.getAllQuestions());
-        questions.add(Question.ADD_MORE);
-        final SpinnerQuestionAdapter adapter = new SpinnerQuestionAdapter(getActivity(), questions);
-        mQuestionSpinner.setAdapter(adapter);
-        mQuestionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        storage.getAllQuestions(new Storage.Callback<List<Question>>() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Question selectedQuestion = adapter.getItem(position);
-                if (selectedQuestion == Question.ADD_MORE) {
-                    showCreateNewTypeDialog();
-                }
-                setupAnswerSpinner();
-            }
+            public void onLoaded(List<Question> questions) {
+                questions = new ArrayList<>(questions);
+                questions.add(Question.ADD_MORE);
+                final SpinnerQuestionAdapter adapter = new SpinnerQuestionAdapter(getActivity(), questions);
+                mQuestionSpinner.setAdapter(adapter);
+                mQuestionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        Question selectedQuestion = adapter.getItem(position);
+                        if (selectedQuestion == Question.ADD_MORE) {
+                            showCreateNewTypeDialog();
+                        }
+                        setupAnswerSpinner();
+                    }
 
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
 
+                    }
+                });
             }
         });
     }

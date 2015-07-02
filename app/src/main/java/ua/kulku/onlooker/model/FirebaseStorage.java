@@ -7,8 +7,9 @@ import com.firebase.client.GenericTypeIndicator;
 import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -18,13 +19,24 @@ import javax.inject.Inject;
 public class FirebaseStorage extends Storage {
 
     private DataSnapshot mRootSnapshot;
+    private Firebase mFirebase;
 
     @Inject
     public FirebaseStorage(Firebase firebase) {
-        firebase.addValueEventListener(new ValueEventListener() {
+        mFirebase = firebase;
+    }
+
+    @Override
+    public void getAllQuestions(final Callback<List<Question>> callback) {
+        mFirebase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mRootSnapshot = dataSnapshot;
+                Collection<Question> questions = mRootSnapshot.getValue(
+                        new GenericTypeIndicator<Map<String, Question>>() {
+                        }
+                ).values();
+                callback.onLoaded(new ArrayList<>(questions));
             }
 
             @Override
@@ -32,20 +44,6 @@ public class FirebaseStorage extends Storage {
 
             }
         });
-        //todo make it more synchronous
-    }
-
-    @Override
-    public List<Question> getAllQuestions() {
-        if (mRootSnapshot == null) {
-            return Collections.emptyList();
-            //todo remove
-        }
-
-        return mRootSnapshot.getValue(
-                new GenericTypeIndicator<ArrayList<Question>>() {
-                }
-        );
     }
 
     @Override
@@ -55,6 +53,9 @@ public class FirebaseStorage extends Storage {
 
     @Override
     public void remove(Question question) {
+        if (mRootSnapshot == null)
+            throw new IllegalStateException("mRootSnapshot == null");
+
         for (DataSnapshot snapshot : mRootSnapshot.getChildren()) {
             boolean equals = snapshot.getValue(Question.class).equals(question);
             if (equals) {

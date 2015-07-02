@@ -59,23 +59,27 @@ public class ListInputsFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        RecyclerView recyclerView = (RecyclerView) getView();
+        final RecyclerView recyclerView = (RecyclerView) getView();
         UUID id = (UUID) getActivity().getIntent().getExtras().getSerializable(ListInputsActivity.E_QUESTION_ID);
-        Question question = storage.getQuestionById(id);
-        if (question == null)
-            throw new IllegalArgumentException("ListInputsActivity.E_QUESTION_ID not found in the retained IDs list.");
-        ActionBar actionBar = getActivity().getActionBar();
-        if (actionBar != null)
-            actionBar.setTitle(question.getName());
-        mAdapter = new ListInputsAdapter(getItems(question.getPossibleAnswers()));
-        recyclerView.setAdapter(mAdapter);
-        recyclerView.addItemDecoration(new DividerDecoration());
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        storage.getQuestionById(id, new Storage.Callback<Question>() {
+            @Override
+            public void onLoaded(Question question) {
+                if (question == null)
+                    throw new IllegalArgumentException("ListInputsActivity.E_QUESTION_ID not found in the retained IDs list.");
+                ActionBar actionBar = getActivity().getActionBar();
+                if (actionBar != null)
+                    actionBar.setTitle(question.getName());
+                mAdapter = new ListInputsAdapter(getItems(question.getPossibleAnswers()));
+                recyclerView.setAdapter(mAdapter);
+                recyclerView.addItemDecoration(new DividerDecoration());
+                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
 
-        SwipeableRecyclerViewTouchListener swipeTouchListener =
-                new SwipeableRecyclerViewTouchListener(recyclerView,
-                        new MySwipeListener());
-        recyclerView.addOnItemTouchListener(swipeTouchListener);
+                SwipeableRecyclerViewTouchListener swipeTouchListener =
+                        new SwipeableRecyclerViewTouchListener(recyclerView,
+                                new MySwipeListener());
+                recyclerView.addOnItemTouchListener(swipeTouchListener);
+            }
+        });
 
     }
 
