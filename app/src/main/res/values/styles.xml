@@ -23,5 +23,5 @@
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">?colorAccent</item>
     </style>
-    <!--<item name="android:textAllCaps">true</item>-->
+
 </resources>
