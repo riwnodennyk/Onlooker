@@ -66,7 +66,7 @@ public class FirebaseStorage extends Storage {
 
     @Override
     public void save() {
-        //todo
+        throw new IllegalStateException("");
 //        mRootSnapshot.getRef().setValue(mQuestions);
     }
 }

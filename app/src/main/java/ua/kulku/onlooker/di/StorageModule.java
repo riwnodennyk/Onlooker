@@ -31,7 +31,6 @@ public class StorageModule {
     @Provides
     @Singleton
     public Storage provideStorage(FirebaseStorage storage) {
-//    public Storage provideStorage(SharedPreferencesStorage storage) {
         return storage;
     }
 }

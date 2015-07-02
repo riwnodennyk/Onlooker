@@ -1,50 +1,53 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="@dimen/activity_vertical_margin"
-            android:paddingEnd="@dimen/activity_horizontal_margin"
-            android:paddingStart="@dimen/activity_horizontal_margin"
-            android:paddingTop="@dimen/activity_vertical_margin"
-            tools:context=".InputActivity$PlaceholderFragment">
+                      xmlns:tools="http://schemas.android.com/tools"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:focusable="true"
+                      android:focusableInTouchMode="true"    android:orientation="vertical"
+                      android:paddingBottom="@dimen/activity_vertical_margin"
+                      android:paddingEnd="@dimen/activity_horizontal_margin"
+                      android:paddingStart="@dimen/activity_horizontal_margin"
+                      android:paddingTop="@dimen/activity_vertical_margin"
+                      tools:context=".InputActivity$PlaceholderFragment">
 
-
+<requestFocus/>
             <TextView
                 style="@style/Label"
                 android:labelFor="@+id/type_input"
-                android:text="@string/type" />
+                android:text="@string/type"/>
 
             <Spinner
                 android:id="@id/type_input"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"/>
 
 
-            <TextView
-                style="@style/Label"
-                android:labelFor="@+id/age_input"
-                android:text="@string/age" />
-
-            <EditText
-                android:id="@id/age_input"
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number" />
+                app:hintTextAppearance="@style/Label">
+
+                <EditText
+                    android:id="@+id/age_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/age"
+                    android:inputType="number"/>
+            </android.support.design.widget.TextInputLayout>
 
             <TextView
                 style="@style/Label"
                 android:labelFor="@+id/gender_input"
-                android:text="@string/gender" />
+                android:text="@string/gender"/>
 
             <RadioGroup
                 android:id="@id/gender_input"
@@ -56,24 +59,24 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:text="@string/male" />
+                    android:text="@string/male"/>
 
                 <RadioButton
                     android:id="@+id/female_input"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/female" />
+                    android:text="@string/female"/>
             </RadioGroup>
 
             <TextView
                 style="@style/Label"
                 android:labelFor="@+id/answer_input"
-                android:text="@string/answer" />
+                android:text="@string/answer"/>
 
             <Spinner
                 android:id="@id/answer_input"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"/>
 
         </LinearLayout>
     </ScrollView>
@@ -87,8 +90,8 @@
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
         android:src="@drawable/ic_poll_white_48dp"
-        app:borderWidth="0dp"
         app:backgroundTint="@color/action_btn_bg"
+        app:borderWidth="0dp"
         app:elevation="4dp"
-        app:rippleColor="@color/action_btn_bg_pressed" />
+        app:rippleColor="@color/action_btn_bg_pressed"/>
 </RelativeLayout>
