@@ -3,32 +3,28 @@ package ua.kulku.onlooker.model;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.GenericTypeIndicator;
 import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 
 import javax.inject.Inject;
 
 /**
  * Created by alavrinenko on 01.07.15.
  */
-public class FirebaseStorage implements Storage {
+public class FirebaseStorage extends Storage {
 
-    private final Firebase myFirebaseRef;
-    public List<Question> mQuestions = new ArrayList<>();
+    private DataSnapshot mRootSnapshot;
 
     @Inject
-    public FirebaseStorage() {
-        myFirebaseRef = new Firebase("https://onlooker.firebaseio.com/");
-        myFirebaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
-
+    public FirebaseStorage(Firebase firebase) {
+        firebase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Question[] value = dataSnapshot.getValue(Question[].class);
-                mQuestions = Arrays.asList(value);
+                mRootSnapshot = dataSnapshot;
             }
 
             @Override
@@ -36,35 +32,40 @@ public class FirebaseStorage implements Storage {
 
             }
         });
+        //todo make it more synchronous
     }
 
     @Override
     public List<Question> getAllQuestions() {
-        return mQuestions;
+        if (mRootSnapshot == null) {
+            return Collections.emptyList();
+            //todo remove
+        }
+
+        return mRootSnapshot.getValue(
+                new GenericTypeIndicator<ArrayList<Question>>() {
+                }
+        );
     }
 
     @Override
     public void add(Question question) {
-        mQuestions.add(question);
-
-        //todo
+        mRootSnapshot.getRef().push().setValue(question);
     }
 
     @Override
     public void remove(Question question) {
-
-        //todo
+        for (DataSnapshot snapshot : mRootSnapshot.getChildren()) {
+            boolean equals = snapshot.getValue(Question.class).equals(question);
+            if (equals) {
+                snapshot.getRef().setValue(null);
+            }
+        }
     }
 
     @Override
     public void save() {
-
         //todo
-    }
-
-    @Override
-    public Question getQuestionById(UUID id) {
-        //todo
-        return null;
+//        mRootSnapshot.getRef().setValue(mQuestions);
     }
 }

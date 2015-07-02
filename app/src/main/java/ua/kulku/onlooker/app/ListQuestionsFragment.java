@@ -79,23 +79,24 @@ public class ListQuestionsFragment extends Fragment {
                         startInputs(question);
                         return true;
                     case R.id.action_remove_questions:
-                        new AlertDialog.Builder(getActivity())
-                                .setTitle(question.getName())
-                                .setMessage(R.string.want_to_remove_question)
-                                .setPositiveButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        //nothing to do. cancelled
-                                    }
-                                })
-                                .setNegativeButton(R.string.remove, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        remove(question);
-                                        notifyDataSetChanged();
-                                        storage.remove(question);
-                                    }
-                                }).show();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setTitle(question.getName());
+                        builder.setMessage(R.string.want_to_remove_question);
+                        builder.setPositiveButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //nothing to do. cancelled
+                            }
+                        });
+                        builder.setNegativeButton(R.string.remove, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                remove(question);
+                                notifyDataSetChanged();
+                                storage.remove(question);
+                            }
+                        });
+                        builder.show();
                         return true;
                 }
                 return false;

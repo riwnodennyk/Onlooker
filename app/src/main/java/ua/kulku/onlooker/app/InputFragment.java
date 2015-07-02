@@ -19,13 +19,13 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import dagger.Component;
+import ua.kulku.onlooker.MyApplication;
 import ua.kulku.onlooker.R;
 import ua.kulku.onlooker.adapter.SpinnerAnswerAdapter;
 import ua.kulku.onlooker.adapter.SpinnerQuestionAdapter;
-import ua.kulku.onlooker.di.StorageModule;
+import ua.kulku.onlooker.di.LocalScope;
 import ua.kulku.onlooker.model.Answer;
 import ua.kulku.onlooker.model.Gender;
 import ua.kulku.onlooker.model.Input;
@@ -53,7 +53,8 @@ public class InputFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        DaggerInputFragment_FragmentComponent.create().inject(this);
+        InputFragment fragment = this;
+        LocalComponent.Instance.get().inject(fragment);
     }
 
     @Override
@@ -200,9 +201,16 @@ public class InputFragment extends Fragment {
         mAgeTextView.setText("");
     }
 
-    @Component(modules = {StorageModule.class})
-    @Singleton
-    public interface FragmentComponent {
+    @Component(dependencies = MyApplication.AppComponent.class)
+    @LocalScope
+    public interface LocalComponent {
+        class Instance{
+            private static LocalComponent get() {
+                return DaggerInputFragment_LocalComponent.builder()
+                        .appComponent(MyApplication.sComponent)
+                        .build();
+            }
+        }
         void inject(InputFragment fragment);
     }
 }

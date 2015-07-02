@@ -3,14 +3,20 @@ package ua.kulku.onlooker.model;
 import java.util.List;
 import java.util.UUID;
 
-public interface Storage {
-    List<Question> getAllQuestions();
+public abstract class Storage {
+    public abstract List<Question> getAllQuestions();
 
-    void add(Question question);
+    public abstract void add(Question question);
 
-    void remove(Question question);
+    public abstract void remove(Question question);
 
-    void save();
+    public abstract void save();
 
-    Question getQuestionById(UUID id);
+    public Question getQuestionById(UUID id) {
+        for (Question question : getAllQuestions()) {
+            if (question.getId().equals(id))
+                return question;
+        }
+        return null;
+    }
 }

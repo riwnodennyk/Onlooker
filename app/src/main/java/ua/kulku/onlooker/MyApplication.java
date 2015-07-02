@@ -5,6 +5,8 @@ import android.app.Application;
 import com.firebase.client.Firebase;
 import com.squareup.leakcanary.LeakCanary;
 
+import javax.inject.Singleton;
+
 import dagger.Component;
 import ua.kulku.onlooker.di.StorageModule;
 import ua.kulku.onlooker.model.Storage;
@@ -26,6 +28,7 @@ public class MyApplication extends Application {
         sComponent = DaggerMyApplication_AppComponent.create();
     }
 
+    @Singleton
     @Component(modules = {StorageModule.class})
     public interface AppComponent {
         Storage storage();

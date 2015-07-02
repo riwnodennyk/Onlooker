@@ -28,9 +28,7 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     provided 'org.glassfish:javax.annotation:10.0-b28'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.5.1'
     compile 'com.github.brnunes:swipeablerecyclerview:1.0.1'
-//    compile 'com.android.support:support-annotations:22.0.0'
     compile 'com.android.support:design:22.2.0'
     compile 'com.android.support:recyclerview-v7:22.1.1'
     compile 'com.android.support:cardview-v7:22.1.1'
