@@ -4,12 +4,14 @@
         <item name="android:colorAccent">#ffe48518</item>
         <item name="colorAccent">#ffe48518</item>
 
-        <item name="android:colorPrimary">#ff74d8d2</item>
-        <item name="colorPrimary">#ff74d8d2</item>
-        <item name="android:colorPrimaryDark">#ff6bc8c2</item>
-        <item name="colorPrimaryDark">#ff6bc8c2</item>
-        <item name="android:colorButtonNormal">#f00</item>
-        <item name="colorButtonNormal">#f00</item>
+        <item name="android:colorPrimary">#ff62b2d8</item>
+        <item name="colorPrimary">#ff62b2d8</item>
+
+        <item name="android:colorPrimaryDark">#ff4f7d9e</item>
+        <item name="colorPrimaryDark">#ff4f7d9e</item>
+
+        <!--<item name="android:colorButtonNormal">#f00</item>-->
+        <!--<item name="colorButtonNormal">#f00</item>-->
     </style>
 
 
