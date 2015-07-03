@@ -11,7 +11,6 @@ import java.util.List;
 
 import ua.kulku.onlooker.model.Answer;
 import ua.kulku.onlooker.model.Input;
-import ua.kulku.onlooker.model.Question;
 
 /**
  * Created by andrii.lavrinenko on 06.04.2015.
@@ -41,6 +40,10 @@ public class ListInputsAdapter extends RecyclerView.Adapter<ListInputsAdapter.My
 
     public Item remove(int position) {
         return mItems.remove(position);
+    }
+
+    public void add(int position, Item item) {
+        mItems.add(position, item);
     }
 
     public static class Item {

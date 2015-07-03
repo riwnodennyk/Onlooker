@@ -1,15 +1,15 @@
 package ua.kulku.onlooker.app;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import ua.kulku.onlooker.R;
 
 
-public class InputActivity extends Activity {
+public class InputActivity extends AppCompatActivity {
 
     private static final String TAG = InputActivity.class.getSimpleName();
     private InputFragment mInputFragment;

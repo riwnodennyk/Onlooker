@@ -46,7 +46,7 @@ public class Answer {
         inputs.add(input);
     }
 
-    public void removeInput(Input input) {
-        inputs.remove(input);
+    public boolean removeInput(Input input) {
+        return inputs.remove(input);
     }
 }

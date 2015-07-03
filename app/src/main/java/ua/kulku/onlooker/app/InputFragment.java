@@ -4,6 +4,7 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +13,6 @@ import android.widget.AdapterView;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -189,7 +189,7 @@ public class InputFragment extends Fragment {
     public void send() {
         String ageString = mAgeTextView.getText().toString();
         if (!TextUtils.isGraphic(ageString)) {
-            Toast.makeText(getActivity(), R.string.invalid_age, Toast.LENGTH_SHORT)
+            Snackbar.make(getView(), R.string.invalid_age, Snackbar.LENGTH_SHORT)
                     .show();
             return;
         }

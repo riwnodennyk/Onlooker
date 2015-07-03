@@ -1,18 +1,18 @@
 package ua.kulku.onlooker.app;
 
-import android.app.ActionBar;
 import android.app.Activity;
-import android.app.Fragment;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.github.brnunes.swipeablerecyclerview.SwipeableRecyclerViewTouchListener;
 import com.github.brnunes.swipeablerecyclerview.SwipeableRecyclerViewTouchListener.SwipeListener;
@@ -66,7 +66,7 @@ public class ListInputsFragment extends Fragment {
                 if (question == null)
                     throw new IllegalArgumentException("ListInputsActivity.E_QUESTION_ID not found in the retained IDs list.");
                 mQuestion = question;
-                ActionBar actionBar = getActivity().getActionBar();
+                android.support.v7.app.ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
                 if (actionBar != null) {
                     actionBar.setTitle(mQuestion.getName());
                 }
@@ -122,14 +122,27 @@ public class ListInputsFragment extends Fragment {
         }
 
         private void onDismissedBySwipe(int[] reverseSortedPositions) {
-            for (int position : reverseSortedPositions) {
-                Item removed = mAdapter.remove(position);
+            for (final int position : reverseSortedPositions) {
+
+                final Item removed = mAdapter.remove(position);
+                mAdapter.notifyItemRemoved(position);
+
                 removed.answer.removeInput(removed.input);
                 mStorage.update(mQuestion);
-                mAdapter.notifyItemRemoved(position);
-                Toast.makeText(getActivity(),
+
+                Snackbar.make(getView(),
                         getString(R.string.deleted_template, removed.getString()),
-                        Toast.LENGTH_SHORT).show();
+                        Snackbar.LENGTH_LONG)
+                        .setAction(R.string.undo, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                mAdapter.add(position, removed);
+                                mAdapter.notifyItemInserted(position);
+
+                                removed.answer.addInput(removed.input);
+                                mStorage.update(mQuestion);
+                            }
+                        }).show();
             }
             mAdapter.notifyDataSetChanged();
             getActivity().setResult(Activity.RESULT_OK);

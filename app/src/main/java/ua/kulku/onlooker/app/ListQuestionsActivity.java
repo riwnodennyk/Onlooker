@@ -1,11 +1,11 @@
 package ua.kulku.onlooker.app;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import ua.kulku.onlooker.R;
 
-public class ListQuestionsActivity extends Activity {
+public class ListQuestionsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
