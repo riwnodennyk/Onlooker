@@ -1,4 +1,4 @@
-package ua.kulku.onlooker.model;
+package ua.kulku.onlooker.storage;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
+
+import ua.kulku.onlooker.model.Question;
+import ua.kulku.onlooker.storage.Storage;
 
 /**
  * Created by alavrinenko on 01.07.15.
@@ -65,8 +68,15 @@ public class FirebaseStorage extends Storage {
     }
 
     @Override
-    public void save() {
-        throw new IllegalStateException("");
-//        mRootSnapshot.getRef().setValue(mQuestions);
+    public void update(Question question) {
+        if (mRootSnapshot == null)
+            throw new IllegalStateException("mRootSnapshot == null");
+
+        for (DataSnapshot snapshot : mRootSnapshot.getChildren()) {
+            boolean equals = snapshot.getValue(Question.class).equals(question);
+            if (equals) {
+                snapshot.getRef().setValue(question);
+            }
+        }
     }
 }

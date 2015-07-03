@@ -32,13 +32,13 @@ import ua.kulku.onlooker.adapter.ListInputsAdapter.Item;
 import ua.kulku.onlooker.model.Answer;
 import ua.kulku.onlooker.model.Input;
 import ua.kulku.onlooker.model.Question;
-import ua.kulku.onlooker.model.Storage;
+import ua.kulku.onlooker.storage.Storage;
 
 public class ListInputsFragment extends Fragment {
 
-    Storage storage;
-
+    private Storage mStorage;
     private ListInputsAdapter mAdapter;
+    private Question mQuestion;
 
     public ListInputsFragment() {
     }
@@ -46,7 +46,7 @@ public class ListInputsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        storage = MyApplication.sComponent.storage();
+        mStorage = MyApplication.sComponent.storage();
     }
 
     @Override
@@ -59,17 +59,20 @@ public class ListInputsFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        final RecyclerView recyclerView = (RecyclerView) getView();
         UUID id = (UUID) getActivity().getIntent().getExtras().getSerializable(ListInputsActivity.E_QUESTION_ID);
-        storage.getQuestionById(id, new Storage.Callback<Question>() {
+        mStorage.getQuestionById(id, new Storage.Callback<Question>() {
             @Override
             public void onLoaded(Question question) {
                 if (question == null)
                     throw new IllegalArgumentException("ListInputsActivity.E_QUESTION_ID not found in the retained IDs list.");
+                mQuestion = question;
                 ActionBar actionBar = getActivity().getActionBar();
-                if (actionBar != null)
-                    actionBar.setTitle(question.getName());
+                if (actionBar != null) {
+                    actionBar.setTitle(mQuestion.getName());
+                }
                 mAdapter = new ListInputsAdapter(getItems(question.getPossibleAnswers()));
+                final RecyclerView recyclerView = (RecyclerView) getView();
+                assert recyclerView != null;
                 recyclerView.setAdapter(mAdapter);
                 recyclerView.addItemDecoration(new DividerDecoration());
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
@@ -80,7 +83,6 @@ public class ListInputsFragment extends Fragment {
                 recyclerView.addOnItemTouchListener(swipeTouchListener);
             }
         });
-
     }
 
     private List<Item> getItems(Collection<Answer> possibleAnswers) {
@@ -123,7 +125,7 @@ public class ListInputsFragment extends Fragment {
             for (int position : reverseSortedPositions) {
                 Item removed = mAdapter.remove(position);
                 removed.answer.removeInput(removed.input);
-                storage.save();
+                mStorage.update(mQuestion);
                 mAdapter.notifyItemRemoved(position);
                 Toast.makeText(getActivity(),
                         getString(R.string.deleted_template, removed.getString()),

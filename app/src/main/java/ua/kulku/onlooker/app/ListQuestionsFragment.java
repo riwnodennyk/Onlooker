@@ -19,7 +19,7 @@ import ua.kulku.onlooker.MyApplication;
 import ua.kulku.onlooker.R;
 import ua.kulku.onlooker.adapter.ListQuestionsAdapter;
 import ua.kulku.onlooker.model.Question;
-import ua.kulku.onlooker.model.Storage;
+import ua.kulku.onlooker.storage.Storage;
 
 /**
  * A placeholder fragment containing a simple view.

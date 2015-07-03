@@ -9,7 +9,7 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 import ua.kulku.onlooker.di.StorageModule;
-import ua.kulku.onlooker.model.Storage;
+import ua.kulku.onlooker.storage.Storage;
 
 /**
  * Created by andrii.lavrinenko on 07.03.2015.

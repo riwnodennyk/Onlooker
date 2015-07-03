@@ -7,9 +7,11 @@ import java.util.GregorianCalendar;
 
 /**
  * Created by andrii.lavrinenko on 07.03.2015.
- */@JsonTypeName
+ */
+@SuppressWarnings("FieldCanBeLocal")
+@JsonTypeName
 
-   public class Input {
+public class Input {
     @JsonProperty
     private int age;
     @JsonProperty

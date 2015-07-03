@@ -10,7 +10,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import ua.kulku.onlooker.model.Storage;
+import ua.kulku.onlooker.storage.Storage;
 
 /**
  * <a href="http://d.android.com/tools/testing/testing_android.html">Testing Fundamentals</a>

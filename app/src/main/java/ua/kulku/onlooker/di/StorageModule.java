@@ -9,8 +9,8 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import ua.kulku.onlooker.MyApplication;
-import ua.kulku.onlooker.model.FirebaseStorage;
-import ua.kulku.onlooker.model.Storage;
+import ua.kulku.onlooker.storage.FirebaseStorage;
+import ua.kulku.onlooker.storage.Storage;
 
 @Module
 public class StorageModule {

@@ -30,7 +30,7 @@ import ua.kulku.onlooker.model.Answer;
 import ua.kulku.onlooker.model.Gender;
 import ua.kulku.onlooker.model.Input;
 import ua.kulku.onlooker.model.Question;
-import ua.kulku.onlooker.model.Storage;
+import ua.kulku.onlooker.storage.Storage;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -104,8 +104,9 @@ public class InputFragment extends Fragment {
                 case RC_CREATE_NEW_ANSWER: {
                     String name = data.getStringExtra(CreateDialog.NAME_R);
                     Answer answer = new Answer(name);
-                    ((Question) mQuestionSpinner.getSelectedItem()).addPossibleAnswer(answer);
-                    storage.save();
+                    Question question = getSelectedQuestion();
+                    question.addPossibleAnswer(answer);
+                    storage.update(question);
                     setupAnswerSpinner();
                     break;
                 }
@@ -153,7 +154,7 @@ public class InputFragment extends Fragment {
     }
 
     private void setupAnswerSpinner() {
-        Question selectedQuestion = ((Question) mQuestionSpinner.getSelectedItem());
+        Question selectedQuestion = getSelectedQuestion();
         List<Answer> possibleAnswers = new ArrayList<>(selectedQuestion.getPossibleAnswers());
         possibleAnswers.add(Answer.ADD_MORE);
         final SpinnerAnswerAdapter adapter = new SpinnerAnswerAdapter(getActivity(), possibleAnswers);
@@ -173,6 +174,10 @@ public class InputFragment extends Fragment {
 
             }
         });
+    }
+
+    private Question getSelectedQuestion() {
+        return (Question) mQuestionSpinner.getSelectedItem();
     }
 
     private void showCreateNewTypeDialog() {
@@ -206,7 +211,7 @@ public class InputFragment extends Fragment {
         input.setCreateDate(new GregorianCalendar());
 
         ((Answer) mAnswerSpinner.getSelectedItem()).addInput(input);
-        storage.save();
+        storage.update(getSelectedQuestion());
 
         mAgeTextView.setText("");
     }
