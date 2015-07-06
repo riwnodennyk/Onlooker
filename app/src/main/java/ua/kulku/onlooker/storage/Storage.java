@@ -10,7 +10,6 @@ import com.firebase.client.GenericTypeIndicator;
 import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
 
@@ -25,11 +24,11 @@ import ua.kulku.onlooker.model.Question;
 @Singleton
 public class Storage {
 
-    private DataSnapshot mRootSnapshot;
+    private DataSnapshot mUserSnapshot;
     private final ValueEventListener mValueEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
-            mRootSnapshot = dataSnapshot;
+            mUserSnapshot = dataSnapshot;
         }
 
         @Override
@@ -37,20 +36,19 @@ public class Storage {
 
         }
     };
-    private Firebase mFirebase;
+    private Firebase mRootFirebase;
 
     @Inject
-    public Storage(Firebase firebase) {
-        mFirebase = firebase;
+    public Storage(Firebase rootFirebase) {
+        mRootFirebase = rootFirebase;
     }
 
 
     public void loginAndLoad(String token, final OnLoaded onLoaded) {
-        mFirebase.authWithOAuthToken("google", token,
+        mRootFirebase.authWithOAuthToken("google", token,
                 new Firebase.AuthResultHandler() {
                     @Override
                     public void onAuthenticated(AuthData authData) {
-                        mFirebase.addValueEventListener(mValueEventListener);
                         load(onLoaded);
                     }
 
@@ -62,11 +60,17 @@ public class Storage {
         );
     }
 
+    private Firebase userFirebase() {
+        return mRootFirebase.child("users").child(mRootFirebase.getAuth().getUid());
+    }
+
     public void load(final OnLoaded onLoaded) {
-        mFirebase.addListenerForSingleValueEvent(new ValueEventListener() {
+        assert mRootFirebase.getAuth() != null;
+        userFirebase().addValueEventListener(mValueEventListener);
+        userFirebase().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                mRootSnapshot = dataSnapshot;
+                mUserSnapshot = dataSnapshot;
                 onLoaded.onLoaded();
             }
 
@@ -78,25 +82,28 @@ public class Storage {
     }
 
     public ArrayList<Question> getAllQuestions() {
-        if (mRootSnapshot == null)
-            throw new IllegalStateException("mRootSnapshot == null");
+        if (mUserSnapshot == null)
+            throw new IllegalStateException("mUserSnapshot == null");
 
-        Collection<Question> questions = mRootSnapshot.getValue(
+        Map<String, Question> allQuestions = mUserSnapshot.getValue(
                 new GenericTypeIndicator<Map<String, Question>>() {
                 }
-        ).values();
-        return new ArrayList<>(questions);
+        );
+        if (allQuestions == null)
+            return new ArrayList<>();
+        else
+            return new ArrayList<>(allQuestions.values());
     }
 
     public void add(Question question) {
-        mRootSnapshot.getRef().push().setValue(question);
+        mUserSnapshot.getRef().push().setValue(question);
     }
 
     public void remove(Question question) {
-        if (mRootSnapshot == null)
-            throw new IllegalStateException("mRootSnapshot == null");
+        if (mUserSnapshot == null)
+            throw new IllegalStateException("mUserSnapshot == null");
 
-        for (DataSnapshot snapshot : mRootSnapshot.getChildren()) {
+        for (DataSnapshot snapshot : mUserSnapshot.getChildren()) {
             boolean equals = snapshot.getValue(Question.class).equals(question);
             if (equals) {
                 snapshot.getRef().setValue(null);
@@ -105,10 +112,10 @@ public class Storage {
     }
 
     public void update(Question question) {
-        if (mRootSnapshot == null)
-            throw new IllegalStateException("mRootSnapshot == null");
+        if (mUserSnapshot == null)
+            throw new IllegalStateException("mUserSnapshot == null");
 
-        for (DataSnapshot snapshot : mRootSnapshot.getChildren()) {
+        for (DataSnapshot snapshot : mUserSnapshot.getChildren()) {
             boolean equals = snapshot.getValue(Question.class).equals(question);
             if (equals) {
                 snapshot.getRef().setValue(question);
@@ -126,16 +133,16 @@ public class Storage {
     }
 
     public boolean logout() {
-        if (mFirebase.getAuth() != null) {
-            mFirebase.removeEventListener(mValueEventListener);
-            mFirebase.unauth();
+        if (mRootFirebase.getAuth() != null) {
+            userFirebase().removeEventListener(mValueEventListener);
+            mRootFirebase.unauth();
             return true;
         }
         return false;
     }
 
     public boolean isLoggedIn() {
-        boolean isLoggedIn = mFirebase.getAuth() != null;
+        boolean isLoggedIn = mRootFirebase.getAuth() != null;
         Log.d("Storage", "Is logged in: " + isLoggedIn);
         return isLoggedIn;
     }
