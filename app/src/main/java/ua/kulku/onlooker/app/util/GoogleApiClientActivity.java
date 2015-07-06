@@ -53,9 +53,7 @@ public abstract class GoogleApiClientActivity extends AppCompatActivity implemen
 
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void setupGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -67,7 +65,6 @@ public abstract class GoogleApiClientActivity extends AppCompatActivity implemen
         if (mGoogleConnectionResult != null) {
             resolveSignInError();
         } else {
-                /* connect API now */
             Log.d(TAG, "Trying to connect to Google API");
             mGoogleApiClient.connect();
         }
@@ -77,11 +74,11 @@ public abstract class GoogleApiClientActivity extends AppCompatActivity implemen
     @Override
     public void onConnectionFailed(ConnectionResult result) {
         if (!mGoogleIntentInProgress) {
-            /* Store the ConnectionResult so that we can use it later when the user clicks on the Google+ login button */
+            /* Store the ConnectionResult so that we can use it later when the user clicks on the Google+ loginAndLoad button */
             mGoogleConnectionResult = result;
 
             if (mGoogleLoginClicked) {
-                /* The user has already clicked login so we attempt to resolve all errors until the user is signed in,
+                /* The user has already clicked loginAndLoad so we attempt to resolve all errors until the user is signed in,
                  * or they cancel. */
                 resolveSignInError();
             } else {

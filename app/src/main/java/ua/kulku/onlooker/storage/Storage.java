@@ -1,5 +1,7 @@
 package ua.kulku.onlooker.storage;
 
+import android.util.Log;
+
 import com.firebase.client.AuthData;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -42,24 +44,14 @@ public class Storage {
         mFirebase = firebase;
     }
 
-    public void init(String token, final OnInit onInit) {
+
+    public void loginAndLoad(String token, final OnLoaded onLoaded) {
         mFirebase.authWithOAuthToken("google", token,
                 new Firebase.AuthResultHandler() {
                     @Override
                     public void onAuthenticated(AuthData authData) {
-                        mFirebase.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                mRootSnapshot = dataSnapshot;
-                                onInit.onLoaded();
-                            }
-
-                            @Override
-                            public void onCancelled(FirebaseError firebaseError) {
-
-                            }
-                        });
                         mFirebase.addValueEventListener(mValueEventListener);
+                        load(onLoaded);
                     }
 
                     @Override
@@ -68,6 +60,21 @@ public class Storage {
                     }
                 }
         );
+    }
+
+    public void load(final OnLoaded onLoaded) {
+        mFirebase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mRootSnapshot = dataSnapshot;
+                onLoaded.onLoaded();
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
     }
 
     public ArrayList<Question> getAllQuestions() {
@@ -118,7 +125,7 @@ public class Storage {
         return null;
     }
 
-    public boolean logOut() {
+    public boolean logout() {
         if (mFirebase.getAuth() != null) {
             mFirebase.removeEventListener(mValueEventListener);
             mFirebase.unauth();
@@ -127,7 +134,13 @@ public class Storage {
         return false;
     }
 
-    public interface OnInit {
+    public boolean isLoggedIn() {
+        boolean isLoggedIn = mFirebase.getAuth() != null;
+        Log.d("Storage", "Is logged in: " + isLoggedIn);
+        return isLoggedIn;
+    }
+
+    public interface OnLoaded {
         void onLoaded();
     }
 }

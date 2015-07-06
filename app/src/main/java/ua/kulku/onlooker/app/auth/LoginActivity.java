@@ -20,7 +20,14 @@ import ua.kulku.onlooker.storage.Storage;
 
 public class LoginActivity extends GoogleApiClientActivity {
     private static final String TAG = LoginActivity.class.getSimpleName();
-
+    private final Storage.OnLoaded
+            mOnLoaded = new Storage.OnLoaded() {
+        @Override
+        public void onLoaded() {
+            startActivity(new Intent(LoginActivity.this, InputActivity.class));
+            finish();
+        }
+    };
 
     private void getGoogleOAuthTokenAndLogin() {
         /* Get OAuth token in Background */
@@ -56,13 +63,7 @@ public class LoginActivity extends GoogleApiClientActivity {
             protected void onPostExecute(String token) {
                 if (token != null) {
                     MyApplication.sComponent.storage()
-                            .init(token, new Storage.OnInit() {
-                                @Override
-                                public void onLoaded() {
-                                    startActivity(new Intent(LoginActivity.this, InputActivity.class));
-                                    finish();
-                                }
-                            });
+                            .loginAndLoad(token, mOnLoaded);
                 } else
                     finish();
             }
@@ -70,6 +71,16 @@ public class LoginActivity extends GoogleApiClientActivity {
         task.execute();
     }
 
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (MyApplication.sComponent.storage().isLoggedIn()) {
+            MyApplication.sComponent.storage()
+                    .load(mOnLoaded);
+        } else
+            setupGoogleApiClient();
+    }
 
     @Override
     public void onConnected(final Bundle bundle) {
