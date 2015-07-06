@@ -2,14 +2,14 @@ package ua.kulku.onlooker.app;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import ua.kulku.onlooker.R;
+import ua.kulku.onlooker.app.auth.LogoutActivity;
 
 
-public class InputActivity extends AppCompatActivity {
+public class InputActivity extends LogoutActivity {
 
     private static final String TAG = InputActivity.class.getSimpleName();
     private InputFragment mInputFragment;
@@ -46,6 +46,9 @@ public class InputActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.send_input_mi:
                 send();
+                return true;
+            case R.id.log_out_mi:
+                logout();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

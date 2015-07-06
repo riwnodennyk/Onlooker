@@ -60,29 +60,25 @@ public class ListInputsFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         UUID id = (UUID) getActivity().getIntent().getExtras().getSerializable(ListInputsActivity.E_QUESTION_ID);
-        mStorage.getQuestionById(id, new Storage.Callback<Question>() {
-            @Override
-            public void onLoaded(Question question) {
-                if (question == null)
-                    throw new IllegalArgumentException("ListInputsActivity.E_QUESTION_ID not found in the retained IDs list.");
-                mQuestion = question;
-                android.support.v7.app.ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-                if (actionBar != null) {
-                    actionBar.setTitle(mQuestion.getName());
-                }
-                mAdapter = new ListInputsAdapter(getItems(question.getPossibleAnswers()));
-                final RecyclerView recyclerView = (RecyclerView) getView();
-                assert recyclerView != null;
-                recyclerView.setAdapter(mAdapter);
-                recyclerView.addItemDecoration(new DividerDecoration());
-                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        Question question = mStorage.getQuestionById(id);
+        if (question == null)
+            throw new IllegalArgumentException("ListInputsActivity.E_QUESTION_ID not found in the retained IDs list.");
+        mQuestion = question;
+        android.support.v7.app.ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(mQuestion.getName());
+        }
+        mAdapter = new ListInputsAdapter(getItems(question.getPossibleAnswers()));
+        final RecyclerView recyclerView = (RecyclerView) getView();
+        assert recyclerView != null;
+        recyclerView.setAdapter(mAdapter);
+        recyclerView.addItemDecoration(new DividerDecoration());
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
 
-                SwipeableRecyclerViewTouchListener swipeTouchListener =
-                        new SwipeableRecyclerViewTouchListener(recyclerView,
-                                new MySwipeListener());
-                recyclerView.addOnItemTouchListener(swipeTouchListener);
-            }
-        });
+        SwipeableRecyclerViewTouchListener swipeTouchListener =
+                new SwipeableRecyclerViewTouchListener(recyclerView,
+                        new MySwipeListener());
+        recyclerView.addOnItemTouchListener(swipeTouchListener);
     }
 
     private List<Item> getItems(Collection<Answer> possibleAnswers) {

@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ua.kulku.onlooker" >
+<manifest
+    package="ua.kulku.onlooker"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
 
     <permission
         android:name="com.example.gcm.permission.C2D_MESSAGE"
-        android:protectionLevel="signature" />
+        android:protectionLevel="signature"/>
 
-    <uses-permission android:name="com.example.gcm.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.example.gcm.permission.C2D_MESSAGE"/>
 
     <application
         android:name=".MyApplication"
@@ -19,31 +20,34 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".app.auth.LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name=".app.InputActivity"
-            android:label="@string/title_activity_input" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:label="@string/title_activity_input">
         </activity>
         <activity
             android:name=".app.ListQuestionsActivity"
             android:label="@string/title_activity_list_questions"
-            android:parentActivityName=".app.InputActivity" >
+            android:parentActivityName=".app.InputActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ua.kulku.onlooker.app.InputActivity" />
+                android:value="ua.kulku.onlooker.app.InputActivity"/>
         </activity>
         <activity
             android:name=".app.ListInputsActivity"
             android:label="@string/title_activity_answers_list"
-            android:parentActivityName=".app.ListQuestionsActivity" >
+            android:parentActivityName=".app.ListQuestionsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".app.ListQuestionsActivity" />
+                android:value=".app.ListQuestionsActivity"/>
         </activity>
     </application>
 
