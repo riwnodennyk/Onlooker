@@ -24,11 +24,11 @@ import ua.kulku.onlooker.model.Question;
 @Singleton
 public class Storage {
 
-    private DataSnapshot mUserSnapshot;
+    private DataSnapshot mUserQuestionsSnapshot;
     private final ValueEventListener mValueEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
-            mUserSnapshot = dataSnapshot;
+            mUserQuestionsSnapshot = dataSnapshot;
         }
 
         @Override
@@ -60,17 +60,17 @@ public class Storage {
         );
     }
 
-    private Firebase userFirebase() {
+    private Firebase userQuestionsFirebase() {
         return mRootFirebase.child("users").child(mRootFirebase.getAuth().getUid());
     }
 
     public void load(final OnLoaded onLoaded) {
         assert mRootFirebase.getAuth() != null;
-        userFirebase().addValueEventListener(mValueEventListener);
-        userFirebase().addListenerForSingleValueEvent(new ValueEventListener() {
+        userQuestionsFirebase().addValueEventListener(mValueEventListener);
+        userQuestionsFirebase().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                mUserSnapshot = dataSnapshot;
+                mUserQuestionsSnapshot = dataSnapshot;
                 onLoaded.onLoaded();
             }
 
@@ -82,10 +82,10 @@ public class Storage {
     }
 
     public ArrayList<Question> getAllQuestions() {
-        if (mUserSnapshot == null)
-            throw new IllegalStateException("mUserSnapshot == null");
+        if (mUserQuestionsSnapshot == null)
+            throw new IllegalStateException("mUserQuestionsSnapshot == null");
 
-        Map<String, Question> allQuestions = mUserSnapshot.getValue(
+        Map<String, Question> allQuestions = mUserQuestionsSnapshot.getValue(
                 new GenericTypeIndicator<Map<String, Question>>() {
                 }
         );
@@ -96,14 +96,14 @@ public class Storage {
     }
 
     public void add(Question question) {
-        mUserSnapshot.getRef().push().setValue(question);
+        mUserQuestionsSnapshot.getRef().push().setValue(question);
     }
 
     public void remove(Question question) {
-        if (mUserSnapshot == null)
-            throw new IllegalStateException("mUserSnapshot == null");
+        if (mUserQuestionsSnapshot == null)
+            throw new IllegalStateException("mUserQuestionsSnapshot == null");
 
-        for (DataSnapshot snapshot : mUserSnapshot.getChildren()) {
+        for (DataSnapshot snapshot : mUserQuestionsSnapshot.getChildren()) {
             boolean equals = snapshot.getValue(Question.class).equals(question);
             if (equals) {
                 snapshot.getRef().setValue(null);
@@ -112,10 +112,10 @@ public class Storage {
     }
 
     public void update(Question question) {
-        if (mUserSnapshot == null)
-            throw new IllegalStateException("mUserSnapshot == null");
+        if (mUserQuestionsSnapshot == null)
+            throw new IllegalStateException("mUserQuestionsSnapshot == null");
 
-        for (DataSnapshot snapshot : mUserSnapshot.getChildren()) {
+        for (DataSnapshot snapshot : mUserQuestionsSnapshot.getChildren()) {
             boolean equals = snapshot.getValue(Question.class).equals(question);
             if (equals) {
                 snapshot.getRef().setValue(question);
@@ -134,7 +134,7 @@ public class Storage {
 
     public boolean logout() {
         if (mRootFirebase.getAuth() != null) {
-            userFirebase().removeEventListener(mValueEventListener);
+            userQuestionsFirebase().removeEventListener(mValueEventListener);
             mRootFirebase.unauth();
             return true;
         }

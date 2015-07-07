@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -92,7 +93,9 @@ public class InputFragment extends Fragment {
                     String name = data.getStringExtra(CreateDialog.NAME_R);
                     final Question question = new Question(name);
                     storage.add(question);
-                    setupQuestionSpinner();
+                    //noinspection unchecked
+                    ArrayAdapter<Question> adapter = (ArrayAdapter<Question>) mQuestionSpinner.getAdapter();
+                    adapter.insert(question, adapter.getCount() - 1);
                     mQuestionSpinner.setSelection(storage.getAllQuestions().indexOf(question));
                     break;
                 }
@@ -210,13 +213,14 @@ public class InputFragment extends Fragment {
     @Component(dependencies = MyApplication.AppComponent.class)
     @LocalScope
     public interface LocalComponent {
-        class Instance{
+        class Instance {
             private static LocalComponent get() {
                 return DaggerInputFragment_LocalComponent.builder()
                         .appComponent(MyApplication.sComponent)
                         .build();
             }
         }
+
         void inject(InputFragment fragment);
     }
 }
