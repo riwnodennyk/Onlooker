@@ -67,7 +67,7 @@ public class InputFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mQuestionSpinner = (Spinner) view.findViewById(R.id.type_input);
+        mQuestionSpinner = (Spinner) view.findViewById(R.id.question_input);
         setupQuestionSpinner();
         mAgeTextView = (TextView) view.findViewById(R.id.age_input);
         mGenderView = (RadioGroup) view.findViewById(R.id.gender_input);
@@ -95,8 +95,10 @@ public class InputFragment extends Fragment {
                     storage.add(question);
                     //noinspection unchecked
                     ArrayAdapter<Question> adapter = (ArrayAdapter<Question>) mQuestionSpinner.getAdapter();
-                    adapter.insert(question, adapter.getCount() - 1);
-                    mQuestionSpinner.setSelection(storage.getAllQuestions().indexOf(question));
+                    int index = adapter.getCount() - 1;
+                    adapter.insert(question, index);
+                    mQuestionSpinner.setSelection(index);
+                    setupAnswerSpinner();
                     break;
                 }
                 case RC_CREATE_NEW_ANSWER: {

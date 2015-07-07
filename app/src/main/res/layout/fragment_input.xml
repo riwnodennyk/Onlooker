@@ -24,11 +24,11 @@
 
             <TextView
                 style="@style/Label"
-                android:labelFor="@+id/type_input"
-                android:text="@string/type"/>
+                android:labelFor="@+id/question_input"
+                android:text="@string/question"/>
 
             <Spinner
-                android:id="@id/type_input"
+                android:id="@id/question_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 

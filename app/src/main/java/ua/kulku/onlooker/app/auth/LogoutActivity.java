@@ -1,5 +1,6 @@
 package ua.kulku.onlooker.app.auth;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.gms.plus.Plus;
@@ -22,6 +23,7 @@ public class LogoutActivity extends GoogleApiClientActivity {
                 Plus.AccountApi.clearDefaultAccount(getGoogleApiClient());
                 getGoogleApiClient().disconnect();
             }
+            startActivity(new Intent(this, LoginActivity.class));
             finish();
         }
     }

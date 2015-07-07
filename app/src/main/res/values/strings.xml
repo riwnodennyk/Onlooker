@@ -23,4 +23,5 @@
     <string name="want_to_remove_question">Впевнені, хочете видалити питання?</string>
     <string name="undo">Відновити</string>
     <string name="log_out">Вийти</string>
+    <string name="question">Питання</string>
 </resources>
