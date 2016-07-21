@@ -3,7 +3,6 @@ package ua.kulku.onlooker;
 import android.app.Application;
 
 import com.firebase.client.Firebase;
-import com.squareup.leakcanary.LeakCanary;
 
 import javax.inject.Singleton;
 
@@ -21,7 +20,6 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        LeakCanary.install(this);
         Firebase.setAndroidContext(this);
         Firebase.getDefaultConfig().setPersistenceEnabled(true);
         sInstance = this;
