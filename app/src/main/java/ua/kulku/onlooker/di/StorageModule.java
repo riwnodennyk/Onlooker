@@ -2,7 +2,8 @@ package ua.kulku.onlooker.di;
 
 import android.content.Context;
 
-import com.firebase.client.Firebase;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import javax.inject.Singleton;
 
@@ -20,8 +21,8 @@ public class StorageModule {
 
     @Provides
     @Singleton
-    public Firebase provideFirebase() {
-        Firebase firebase = new Firebase("https://onlooker.firebaseio.com/questions/");
+    public DatabaseReference provideFirebase() {
+        DatabaseReference firebase = FirebaseDatabase.getInstance().getReference();
         firebase.keepSynced(true);
         return firebase;
     }

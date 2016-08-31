@@ -1,5 +1,6 @@
 package ua.kulku.onlooker.app.auth;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,10 @@ import ua.kulku.onlooker.app.InputActivity;
 public class LoginActivity extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 242;
+
+    public static Intent loginIntent(Context context) {
+        return new Intent(context, LoginActivity.class);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

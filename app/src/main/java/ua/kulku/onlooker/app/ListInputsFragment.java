@@ -59,7 +59,7 @@ public class ListInputsFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        UUID id = (UUID) getActivity().getIntent().getExtras().getSerializable(ListInputsActivity.E_QUESTION_ID);
+        String id = (String) getActivity().getIntent().getExtras().getSerializable(ListInputsActivity.E_QUESTION_ID);
         Question question = mStorage.getQuestionById(id);
         if (question == null)
             throw new IllegalArgumentException("ListInputsActivity.E_QUESTION_ID not found in the retained IDs list.");

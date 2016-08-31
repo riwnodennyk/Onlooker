@@ -8,6 +8,8 @@ import com.firebase.ui.auth.AuthUI;
 import ua.kulku.onlooker.MyApplication;
 import ua.kulku.onlooker.R;
 
+import static ua.kulku.onlooker.app.auth.LoginActivity.loginIntent;
+
 public class LogoutActivity extends AppCompatActivity {
 
     protected void logout() {
@@ -17,6 +19,8 @@ public class LogoutActivity extends AppCompatActivity {
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             Toast.makeText(LogoutActivity.this, R.string.logged_out, Toast.LENGTH_SHORT).show();
+                            finish();
+                            startActivity(loginIntent(this));
                         } else {
                             Toast.makeText(LogoutActivity.this, R.string.error, Toast.LENGTH_SHORT).show();
                         }

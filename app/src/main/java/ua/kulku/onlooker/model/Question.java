@@ -24,19 +24,19 @@ public class Question {
         }
     };
 
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 
     @JsonProperty
-    private UUID id;
+    private String id;
     @JsonProperty
     private String name;
     @JsonProperty
     private ArrayList<Answer> possibleAnswers = new ArrayList<>();
 
     public Question(String name) {
-        this.id = UUID.randomUUID();
+        this.id = UUID.randomUUID().toString();
         this.name = name;
     }
 
@@ -46,7 +46,7 @@ public class Question {
 
     private void upgrade() {
         if (id == null)
-            id = UUID.randomUUID();
+            id = UUID.randomUUID().toString();
     }
 
     @JsonIgnore

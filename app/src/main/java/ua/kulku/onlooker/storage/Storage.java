@@ -1,16 +1,15 @@
 package ua.kulku.onlooker.storage;
 
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.GenericTypeIndicator;
-import com.firebase.client.ValueEventListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -28,19 +27,20 @@ public class Storage {
         }
 
         @Override
-        public void onCancelled(FirebaseError firebaseError) {
+        public void onCancelled(DatabaseError databaseError) {
 
         }
+
     };
-    private Firebase mRootFirebase;
+    private DatabaseReference mRootFirebase;
 
     @Inject
-    public Storage(Firebase rootFirebase) {
+    public Storage(DatabaseReference rootFirebase) {
         mRootFirebase = rootFirebase;
     }
 
 
-    private Firebase userQuestionsFirebase() {
+    private DatabaseReference userQuestionsFirebase() {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         assert currentUser != null;
         return mRootFirebase.child("users").child(currentUser.getUid());
@@ -56,7 +56,7 @@ public class Storage {
             }
 
             @Override
-            public void onCancelled(FirebaseError firebaseError) {
+            public void onCancelled(DatabaseError databaseError) {
 
             }
         });
@@ -104,7 +104,7 @@ public class Storage {
         }
     }
 
-    public Question getQuestionById(UUID id) {
+    public Question getQuestionById(String id) {
         for (Question question : getAllQuestions()) {
             if (question.getId().equals(id)) {
                 return question;
@@ -114,12 +114,8 @@ public class Storage {
     }
 
     public boolean logout() {
-        if (mRootFirebase.getAuth() != null) {
-            userQuestionsFirebase().removeEventListener(mValueEventListener);
-            mRootFirebase.unauth();
-            return true;
-        }
-        return false;
+        userQuestionsFirebase().removeEventListener(mValueEventListener);
+        return true;
     }
 
     public interface OnLoaded {
