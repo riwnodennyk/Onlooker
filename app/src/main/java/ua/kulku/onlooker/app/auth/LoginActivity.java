@@ -10,6 +10,7 @@ import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 
 import ua.kulku.onlooker.MyApplication;
+import ua.kulku.onlooker.R;
 import ua.kulku.onlooker.app.InputActivity;
 
 public class LoginActivity extends AppCompatActivity {
@@ -37,6 +38,7 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             startActivityForResult(
                     AuthUI.getInstance().createSignInIntentBuilder()
+                            .setLogo(R.mipmap.ic_launcher)
                             .setProviders(AuthUI.GOOGLE_PROVIDER)
                             .setTosUrl("https://www.google.com/policies/terms/")
                             .build(),
