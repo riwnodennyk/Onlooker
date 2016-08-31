@@ -1,8 +1,5 @@
 package ua.kulku.onlooker.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,7 +12,6 @@ import ua.kulku.onlooker.R;
 /**
  * Created by andrii.lavrinenko on 07.03.2015.
  */
-@JsonTypeName
 public class Question {
     public static final Question ADD_MORE = new Question(MyApplication.sInstance.getString(R.string.add_more)) {
         @Override
@@ -28,11 +24,8 @@ public class Question {
         return id;
     }
 
-    @JsonProperty
     private String id;
-    @JsonProperty
     private String name;
-    @JsonProperty
     private ArrayList<Answer> possibleAnswers = new ArrayList<>();
 
     public Question(String name) {
@@ -49,7 +42,6 @@ public class Question {
             id = UUID.randomUUID().toString();
     }
 
-    @JsonIgnore
     public String getAnswerStats() {
         StringBuilder sb = new StringBuilder();
         int inputsCount = getInputsCount();
@@ -73,7 +65,6 @@ public class Question {
         return Collections.unmodifiableList(possibleAnswers);
     }
 
-    @JsonIgnore
     public int getInputsCount() {
         int count = 0;
         for (Answer answer : possibleAnswers) {

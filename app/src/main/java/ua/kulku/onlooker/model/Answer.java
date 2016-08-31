@@ -1,8 +1,5 @@
 package ua.kulku.onlooker.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -14,12 +11,9 @@ import ua.kulku.onlooker.R;
  * Created by andrii.lavrinenko on 07.03.2015.
  */
 
-@JsonTypeName
 public class Answer {
     public static final Answer ADD_MORE = new Answer(MyApplication.sInstance.getString(R.string.add_more));
-    @JsonProperty
     private String name;
-    @JsonProperty
     private ArrayList<Input> inputs = new ArrayList<>();
 
     public Answer() {
