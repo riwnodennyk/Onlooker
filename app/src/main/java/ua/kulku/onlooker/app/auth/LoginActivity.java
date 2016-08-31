@@ -1,5 +1,6 @@
 package ua.kulku.onlooker.app.auth;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -47,7 +48,14 @@ public class LoginActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
-            letUserLoginOrSync();
+            switch (resultCode) {
+                case Activity.RESULT_CANCELED:
+                    finish();
+                    break;
+                default:
+                    letUserLoginOrSync();
+                    break;
+            }
         }
     }
 }
