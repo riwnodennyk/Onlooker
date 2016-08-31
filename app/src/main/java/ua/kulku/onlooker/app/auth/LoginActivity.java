@@ -1,91 +1,48 @@
 package ua.kulku.onlooker.app.auth;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 
-import com.google.android.gms.auth.GoogleAuthException;
-import com.google.android.gms.auth.GoogleAuthUtil;
-import com.google.android.gms.auth.UserRecoverableAuthException;
-import com.google.android.gms.common.Scopes;
-import com.google.android.gms.plus.Plus;
-
-import java.io.IOException;
+import com.firebase.ui.auth.AuthUI;
+import com.google.firebase.auth.FirebaseAuth;
 
 import ua.kulku.onlooker.MyApplication;
 import ua.kulku.onlooker.app.InputActivity;
-import ua.kulku.onlooker.app.util.GoogleApiClientActivity;
-import ua.kulku.onlooker.storage.Storage;
 
-public class LoginActivity extends GoogleApiClientActivity {
-    private static final String TAG = LoginActivity.class.getSimpleName();
-    private final Storage.OnLoaded
-            mOnLoaded = new Storage.OnLoaded() {
-        @Override
-        public void onLoaded() {
-            startActivity(new Intent(LoginActivity.this, InputActivity.class));
-            finish();
-        }
-    };
+public class LoginActivity extends AppCompatActivity {
 
-    private void getGoogleOAuthTokenAndLogin() {
-        /* Get OAuth token in Background */
-        AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
-            String errorMessage = null;
-
-            @Override
-            protected String doInBackground(Void... params) {
-                String token = null;
-
-                try {
-                    String scope = String.format("oauth2:%s", Scopes.PLUS_LOGIN);
-                    token = GoogleAuthUtil.getToken(LoginActivity.this, Plus.AccountApi.getAccountName(getGoogleApiClient()), scope);
-                } catch (IOException transientEx) {
-                    /* Network or server error */
-                    Log.e(TAG, "Error authenticating with Google: " + transientEx);
-                    errorMessage = "Network error: " + transientEx.getMessage();
-                } catch (UserRecoverableAuthException e) {
-                    Log.w(TAG, "Recoverable Google OAuth error: " + e.toString());
-                    /* We probably need to ask for permissions, so start the intent if there is none pending */
-                    resolve(e);
-                } catch (GoogleAuthException authEx) {
-                    /* The call is not ever expected to succeed assuming you have already verified that
-                     * Google Play services is installed. */
-                    Log.e(TAG, "Error authenticating with Google: " + authEx.getMessage(), authEx);
-                    errorMessage = "Error authenticating with Google: " + authEx.getMessage();
-                }
-
-                return token;
-            }
-
-            @Override
-            protected void onPostExecute(String token) {
-                if (token != null) {
-                    MyApplication.sComponent.storage()
-                            .loginAndLoad(token, mOnLoaded);
-                } else
-                    finish();
-            }
-        };
-        task.execute();
-    }
-
+    private static final int RC_SIGN_IN = 242;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (MyApplication.sComponent.storage().isLoggedIn()) {
+        letUserLoginOrSync();
+    }
+
+    private void letUserLoginOrSync() {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        if (auth.getCurrentUser() != null) {
             MyApplication.sComponent.storage()
-                    .load(mOnLoaded);
-        } else
-            setupGoogleApiClient();
-        //todo replace with firebase ui activity
+                    .load(() -> {
+                        startActivity(new Intent(LoginActivity.this, InputActivity.class));
+                        finish();
+                    });
+        } else {
+            startActivityForResult(
+                    AuthUI.getInstance().createSignInIntentBuilder()
+                            .setProviders(AuthUI.GOOGLE_PROVIDER)
+                            .setTosUrl("https://www.google.com/policies/terms/")
+                            .build(),
+                    RC_SIGN_IN);
+        }
     }
 
     @Override
-    public void onConnected(final Bundle bundle) {
-        getGoogleOAuthTokenAndLogin();
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_SIGN_IN) {
+            letUserLoginOrSync();
+        }
     }
-
 }

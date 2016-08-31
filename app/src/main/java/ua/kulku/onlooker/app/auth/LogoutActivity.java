@@ -1,30 +1,26 @@
 package ua.kulku.onlooker.app.auth;
 
-import android.content.Intent;
-import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
-import com.google.android.gms.plus.Plus;
+import com.firebase.ui.auth.AuthUI;
 
 import ua.kulku.onlooker.MyApplication;
-import ua.kulku.onlooker.app.util.GoogleApiClientActivity;
+import ua.kulku.onlooker.R;
 
-public class LogoutActivity extends GoogleApiClientActivity {
-    private static final String TAG = LoginActivity.class.getSimpleName();
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setupGoogleApiClient();
-    }
+public class LogoutActivity extends AppCompatActivity {
 
     protected void logout() {
         if (MyApplication.sComponent.storage().logout()) {
-            if (getGoogleApiClient().isConnected()) {
-                Plus.AccountApi.clearDefaultAccount(getGoogleApiClient());
-                getGoogleApiClient().disconnect();
-            }
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
+            AuthUI.getInstance()
+                    .signOut(this)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(LogoutActivity.this, R.string.logged_out, Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(LogoutActivity.this, R.string.error, Toast.LENGTH_SHORT).show();
+                        }
+                    });
         }
     }
 

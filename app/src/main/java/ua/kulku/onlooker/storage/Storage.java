@@ -1,13 +1,12 @@
 package ua.kulku.onlooker.storage;
 
-import android.util.Log;
-
-import com.firebase.client.AuthData;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.GenericTypeIndicator;
 import com.firebase.client.ValueEventListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -18,9 +17,6 @@ import javax.inject.Singleton;
 
 import ua.kulku.onlooker.model.Question;
 
-/**
- * Created by alavrinenko on 01.07.15.
- */
 @Singleton
 public class Storage {
 
@@ -44,28 +40,13 @@ public class Storage {
     }
 
 
-    public void loginAndLoad(String token, final OnLoaded onLoaded) {
-        mRootFirebase.authWithOAuthToken("google", token,
-                new Firebase.AuthResultHandler() {
-                    @Override
-                    public void onAuthenticated(AuthData authData) {
-                        load(onLoaded);
-                    }
-
-                    @Override
-                    public void onAuthenticationError(FirebaseError firebaseError) {
-                        // Authenticated failed with error firebaseError
-                    }
-                }
-        );
-    }
-
     private Firebase userQuestionsFirebase() {
-        return mRootFirebase.child("users").child(mRootFirebase.getAuth().getUid());
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        assert currentUser != null;
+        return mRootFirebase.child("users").child(currentUser.getUid());
     }
 
     public void load(final OnLoaded onLoaded) {
-        assert mRootFirebase.getAuth() != null;
         userQuestionsFirebase().addValueEventListener(mValueEventListener);
         userQuestionsFirebase().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -139,12 +120,6 @@ public class Storage {
             return true;
         }
         return false;
-    }
-
-    public boolean isLoggedIn() {
-        boolean isLoggedIn = mRootFirebase.getAuth() != null;
-        Log.d("Storage", "Is logged in: " + isLoggedIn);
-        return isLoggedIn;
     }
 
     public interface OnLoaded {

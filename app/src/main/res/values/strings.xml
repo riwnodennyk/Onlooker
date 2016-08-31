@@ -24,4 +24,6 @@
     <string name="undo">Відновити</string>
     <string name="log_out">Вийти</string>
     <string name="question">Питання</string>
+    <string name="logged_out">Вилогінено</string>
+    <string name="error">Помилка</string>
 </resources>
