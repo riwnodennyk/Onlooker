@@ -71,7 +71,7 @@ public class InputFragment extends Fragment {
         setupQuestionSpinner();
         mAgeTextView = (TextView) view.findViewById(R.id.age_input);
         mGenderView = (RadioGroup) view.findViewById(R.id.gender_input);
-
+//todo data binding
         mAnswerSpinner = (Spinner) view.findViewById(R.id.answer_input);
 
         view.findViewById(R.id.show_polls_input)

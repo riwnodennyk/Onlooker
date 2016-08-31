@@ -80,6 +80,7 @@ public class LoginActivity extends GoogleApiClientActivity {
                     .load(mOnLoaded);
         } else
             setupGoogleApiClient();
+        //todo replace with firebase ui activity
     }
 
     @Override

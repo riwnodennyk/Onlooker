@@ -60,7 +60,7 @@ public abstract class ListQuestionsAdapter extends RecyclerView.Adapter<ListQues
             super(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_question_list, parent, false));
             title = (TextView) itemView.findViewById(R.id.title_item_question_list);
             answers = (TextView) itemView.findViewById(R.id.answers_item_question_list);
-
+//todo data binding
             View options = itemView.findViewById(R.id.options_item_question_list);
             popup = new PopupMenu(parent.getContext(), options);
             popup.getMenuInflater().inflate(R.menu.menu_list_questions, popup.getMenu());
